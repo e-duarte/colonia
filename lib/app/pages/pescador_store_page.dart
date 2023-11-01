@@ -125,7 +125,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
           .toList(),
     );
 
-    PescadorService().savePescador(pescador);
+    PescadorService().save(pescador);
     print('Salvo');
   }
 

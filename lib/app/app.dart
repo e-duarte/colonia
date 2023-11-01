@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       title: 'Colônia de Pesca de Vitória do Xingu',
       initialRoute: '/homepage',
       routes: {
-        '/homepage': (context) => HomePage(),
+        '/homepage': (context) => const HomePage(),
         '/pescadorstorepage': (context) => const PecadorStorePage(),
       },
     );

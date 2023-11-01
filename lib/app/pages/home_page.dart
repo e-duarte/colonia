@@ -1,12 +1,11 @@
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:flutter/material.dart';
-import 'package:colonia/app/data/pescadores.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:colonia/app/widgets/functions_bar.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key}); // color: Colors.amber,
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,17 +18,27 @@ class _HomePageState extends State<HomePage> {
     'CPF',
     'Município',
     'Telefone',
+    'Ações'
   ];
 
   List<Pescador> pescadores = [];
+  List<Pescador> filtredPescadores = [];
   bool isPescadoresLoad = false;
+  List<bool> selected = [];
 
   @override
   void initState() {
     super.initState();
     PescadorService().getAll().then((value) {
-      pescadores = value;
-      isPescadoresLoad = true;
+      setState(() {
+        pescadores = value;
+        filtredPescadores = pescadores;
+        isPescadoresLoad = true;
+
+        selected =
+            List<bool>.generate(filtredPescadores.length, (int index) => false);
+        print(selected.length);
+      });
     });
   }
 
@@ -40,31 +49,111 @@ class _HomePageState extends State<HomePage> {
       p.cpf,
       p.endereco.municipio,
       p.endereco.fone,
+      'actions'
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: FuctionsBar(
         child: Row(
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.2,
-              child: Text('Colonia Z-12'),
+              width: MediaQuery.of(context).size.width * 0.12,
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Image.asset(
+                        'assets/icons/fish.png',
+                        // scale: 0.1,
+                      ),
+                      const Text(
+                        'Colônica Z-12',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
             Expanded(
-              child: Container(
-                  height: 56,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.new_label),
-                      Icon(Icons.print),
-                      Icon(Icons.access_time_filled),
-                      Icon(Icons.refresh),
-                    ],
-                  )),
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.new_label),
+                          iconSize: 30,
+                          color: Colors.green,
+                        ),
+                        const Text('Novo Pescador'),
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.print),
+                          iconSize: 30,
+                        ),
+                        const Text('Ficha de Matricula')
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.print),
+                          iconSize: 30,
+                        ),
+                        const Text('INSS')
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.access_time_filled),
+                          iconSize: 30,
+                        ),
+                        const Text('Pagamentos'),
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.refresh),
+                          iconSize: 30,
+                        ),
+                        const Text('Recarregar')
+                      ],
+                    ),
+                    const SizedBox(width: 30),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.settings),
+                          iconSize: 30,
+                        ),
+                        const Text('Config.')
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.2,
@@ -81,7 +170,22 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onChanged: (value) {
-                  print(value);
+                  setState(() {
+                    if (value.isEmpty) {
+                      filtredPescadores = pescadores;
+                    } else {
+                      filtredPescadores = pescadores
+                          .where((Pescador p) => p.nomeCompleto
+                              .toLowerCase()
+                              .contains(value.toLowerCase()))
+                          .toList();
+                    }
+
+                    selected = List<bool>.generate(
+                      filtredPescadores.length,
+                      (int index) => false,
+                    );
+                  });
                 },
               ),
             ),
@@ -91,31 +195,74 @@ class _HomePageState extends State<HomePage> {
       body: isPescadoresLoad
           ? Padding(
               padding: const EdgeInsets.only(
-                  left: 50, right: 50, bottom: 50, top: 40),
+                left: 50,
+                right: 50,
+                bottom: 50,
+                top: 40,
+              ),
               child: DataTable2(
                 columnSpacing: 10,
                 horizontalMargin: 12,
                 minWidth: 600,
-                showCheckboxColumn: false,
+                // showCheckboxColumn: false,
                 isVerticalScrollBarVisible: true,
                 headingRowColor:
                     MaterialStateColor.resolveWith((states) => Colors.green),
                 headingTextStyle: const TextStyle(color: Colors.white),
                 columns: columns
-                    .map((String c) => DataColumn(label: Text(c)))
+                    .map((String c) => c != 'Ações'
+                        ? DataColumn2(label: Text(c))
+                        : DataColumn2(label: Text(c), fixedWidth: 100))
                     .toList(),
-                rows: pescadores
-                    .map(
-                      (Pescador p) => DataRow(
-                        cells: pescadorToDataRow(p)
-                            .map((e) => DataCell(Text(e)))
-                            .toList(),
-                        onSelectChanged: (bool? value) {
-                          print(p.toJson());
-                        },
-                      ),
-                    )
-                    .toList(),
+                rows: List<DataRow>.generate(
+                  filtredPescadores.length,
+                  (index) => DataRow(
+                    selected: selected[index],
+                    cells: pescadorToDataRow(filtredPescadores[index]).map((e) {
+                      if (e == 'actions') {
+                        return DataCell(
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  PescadorService()
+                                      .update(filtredPescadores[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  PescadorService()
+                                      .delete(filtredPescadores[index]);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                      return DataCell(Text(e));
+                    }).toList(),
+                    onSelectChanged: (bool? value) {
+                      setState(() {
+                        selected = List<bool>.generate(
+                          filtredPescadores.length,
+                          (index) => false,
+                        );
+                        selected[index] = value!;
+
+                        print(
+                            'Pescador selected: ${filtredPescadores[index].nomeCompleto}');
+                      });
+                    },
+                  ),
+                ),
               ),
             )
           : SizedBox(

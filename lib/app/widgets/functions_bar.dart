@@ -6,7 +6,7 @@ class FuctionsBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
   });
 
-  final double height = 56;
+  final double height = 80;
   final Widget child;
 
   @override
@@ -15,6 +15,8 @@ class FuctionsBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 50, right: 50),
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey))),
       child: child,
     );
   }

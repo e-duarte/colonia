@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 var pescadores = [
   Pescador(
-      nomeCompleto: 'João Ewerton Duarte de Souza',
+      nomeCompleto: 'Joca',
       apelido: 'Jão',
       pai: "José",
       mae: 'Maria',

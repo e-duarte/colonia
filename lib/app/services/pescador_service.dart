@@ -7,7 +7,7 @@ import 'dart:convert';
 class PescadorService {
   final uri = '${Network.apiURL}/pescador';
 
-  Future<Pescador> savePescador(Pescador pescador) async {
+  Future<Pescador> save(Pescador pescador) async {
     final response = await http.post(
       Uri.parse(uri),
       headers: <String, String>{
@@ -24,16 +24,24 @@ class PescadorService {
   }
 
   Future<List<Pescador>> getAll() async {
-    final response = await http.get(Uri.parse(uri));
+    return pescadores;
 
-    print(response.body);
+    // final response = await http.get(Uri.parse(uri));
 
-    if (response.statusCode == 200) {
-      var pescadoresJson =
-          jsonDecode(response.body) as List<Map<String, dynamic>>;
-      return pescadoresJson.map((data) => Pescador.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to load album');
-    }
+    // if (response.statusCode == 200) {
+    //   var pescadoresJson =
+    //       jsonDecode(response.body) as List<Map<String, dynamic>>;
+    //   return pescadoresJson.map((data) => Pescador.fromJson(data)).toList();
+    // } else {
+    //   throw Exception('Failed to load album');
+    // }
+  }
+
+  Future<Pescador> delete(Pescador pescador) async {
+    throw Exception('Delete');
+  }
+
+  Future<Pescador> update(Pescador pescador) async {
+    throw Exception('update');
   }
 }
