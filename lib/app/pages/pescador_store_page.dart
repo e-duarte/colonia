@@ -802,7 +802,7 @@ class _StepControllerState extends State<StepController> {
             tabs: widget.tabs,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.12,
+            height: MediaQuery.of(context).size.height * 0.1,
           ),
           Expanded(
             child: SizedBox(
@@ -813,29 +813,49 @@ class _StepControllerState extends State<StepController> {
           SizedBox(
             height: 50,
             width: MediaQuery.of(context).size.width * 0.8,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Stack(
               children: [
-                if (activeTab == widget.views.length - 1)
-                  ElevatedButton(
+                Positioned(
+                  left: 0,
+                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.red,
                     ),
-                    onPressed: widget.saveForm,
-                    child: const Text('salvar'),
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, '/homepage');
+                    },
+                    child: const Text('Fechar'),
+                  ),
+                ),
+                if (activeTab == widget.views.length - 1)
+                  Positioned.fill(
+                    // left: 300,
+                    // right: 300,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        onPressed: widget.saveForm,
+                        child: const Text('salvar'),
+                      ),
+                    ),
                   ),
                 const SizedBox(
                   width: 20,
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                Positioned(
+                  right: 0,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed:
+                        activeTab == widget.views.length - 1 ? null : nextView,
+                    child: const Text('Próximo'),
                   ),
-                  onPressed:
-                      activeTab == widget.views.length - 1 ? null : nextView,
-                  child: const Text('Próximo'),
-                ),
+                )
               ],
             ),
           )

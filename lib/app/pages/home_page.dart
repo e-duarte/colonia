@@ -87,7 +87,9 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/pescadorstorepage');
+                          },
                           icon: const Icon(Icons.new_label),
                           iconSize: 30,
                           color: Colors.green,
