@@ -30,6 +30,8 @@ class Pescador {
 
   final List<Dependente> dependentes;
 
+  DateTime? dataMatricula;
+
   Pescador({
     this.id,
     required this.nomeCompleto,
@@ -54,6 +56,7 @@ class Pescador {
     required this.secao,
     required this.zona,
     required this.dependentes,
+    this.dataMatricula,
   });
 
   factory Pescador.fromJson(Map<String, dynamic> data) {
@@ -91,7 +94,7 @@ class Pescador {
       'apelido': apelido,
       'pai': pai,
       'mae': mae,
-      'nascimento': dataNascimento,
+      'nascimento': DateFormat('dd/MM/yyyy').format(dataNascimento),
       'naturalidade': naturalidade,
       'uf': ufNat,
       'estadoCivil': estadoCivil,

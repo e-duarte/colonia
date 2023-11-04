@@ -11,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
 
+  intl: ^0.18.0
   cupertino_icons: ^1.0.2
   data_table_2: ^2.5.8
   http: ^1.1.0
-  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

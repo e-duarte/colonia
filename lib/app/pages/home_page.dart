@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
         selected =
             List<bool>.generate(filtredPescadores.length, (int index) => false);
-        print(selected.length);
       });
     });
   }

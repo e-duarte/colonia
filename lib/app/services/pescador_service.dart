@@ -8,19 +8,21 @@ class PescadorService {
   final uri = '${Network.apiURL}/pescador';
 
   Future<Pescador> save(Pescador pescador) async {
-    final response = await http.post(
-      Uri.parse(uri),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(pescador.toJson()),
-    );
+    await Future.delayed(const Duration(milliseconds: 1000));
+    return pescador;
+    // final response = await http.post(
+    //   Uri.parse(uri),
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json; charset=UTF-8',
+    //   },
+    //   body: jsonEncode(pescador.toJson()),
+    // );
 
-    if (response.statusCode == 201) {
-      return pescador;
-    } else {
-      throw Exception('Failed to create pescador.');
-    }
+    // if (response.statusCode == 201) {
+    //   return pescador;
+    // } else {
+    //   throw Exception('Failed to create pescador.');
+    // }
   }
 
   Future<List<Pescador>> getAll() async {
