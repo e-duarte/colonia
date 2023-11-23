@@ -44,4 +44,26 @@ class Endereco {
       'telefone': fone,
     };
   }
+
+  Endereco copyWith({
+    String? municipio,
+    String? ufAtual,
+    String? cep,
+    String? logradouro,
+    String? bairro,
+    String? numero,
+    String? complemento,
+    String? fone,
+  }) {
+    return Endereco(
+      municipio: municipio ?? this.municipio,
+      ufAtual: ufAtual ?? this.ufAtual,
+      cep: cep ?? this.cep,
+      logradouro: logradouro ?? this.logradouro,
+      bairro: bairro ?? this.bairro,
+      numero: numero ?? this.numero,
+      complemento: complemento ?? this.complemento,
+      fone: fone ?? this.fone,
+    );
+  }
 }

@@ -114,4 +114,58 @@ class Pescador {
       'dependentes': dependentes.map((d) => d.toJson()).toList(),
     };
   }
+
+  Pescador copyWith({
+    int? id,
+    String? nomeCompleto,
+    String? apelido,
+    String? pai,
+    String? mae,
+    DateTime? dataNascimento,
+    String? naturalidade,
+    String? ufNat,
+    String? estadoCivil,
+    String? conjuge,
+    String? cpf,
+    String? rg,
+    Endereco? endereco,
+    String? nit,
+    String? cei,
+    String? pisCef,
+    String? ctps,
+    String? serie,
+    String? rgp,
+    String? tituloEleitor,
+    String? secao,
+    String? zona,
+    List<Dependente>? dependentes,
+    DateTime? dataMatricula,
+  }) {
+    return Pescador(
+      id: id ?? this.id,
+      nomeCompleto: nomeCompleto ?? this.nomeCompleto,
+      apelido: apelido ?? this.apelido,
+      pai: pai ?? this.pai,
+      mae: mae ?? this.mae,
+      dataNascimento: dataNascimento ?? this.dataNascimento,
+      naturalidade: naturalidade ?? this.naturalidade,
+      ufNat: ufNat ?? this.ufNat,
+      estadoCivil: estadoCivil ?? this.estadoCivil,
+      conjuge: conjuge ?? this.conjuge,
+      cpf: cpf ?? this.cpf,
+      rg: rg ?? this.rg,
+      endereco: endereco ?? this.endereco.copyWith(),
+      nit: nit ?? this.nit,
+      cei: cei ?? this.cei,
+      pisCef: pisCef ?? this.pisCef,
+      ctps: ctps ?? this.ctps,
+      serie: serie ?? this.serie,
+      rgp: rgp ?? this.rgp,
+      tituloEleitor: tituloEleitor ?? this.tituloEleitor,
+      secao: secao ?? this.secao,
+      zona: zona ?? this.zona,
+      dependentes: dependentes ??
+          this.dependentes.map((dependente) => dependente.copyWith()).toList(),
+    );
+  }
 }

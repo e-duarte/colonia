@@ -14,4 +14,14 @@ class Dependente {
       'telefone': fone,
     };
   }
+
+  Dependente copyWith({
+    String? nome,
+    String? fone,
+  }) {
+    return Dependente(
+      nome: nome ?? this.nome,
+      fone: fone ?? this.fone,
+    );
+  }
 }

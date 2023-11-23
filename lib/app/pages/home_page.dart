@@ -1,4 +1,5 @@
 import 'package:colonia/app/models/pescador.dart';
+import 'package:colonia/app/pages/pescador_edit_page.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {},
                           icon: const Icon(Icons.print),
                           iconSize: 30,
                         ),
@@ -226,8 +227,10 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  PescadorService()
-                                      .update(filtredPescadores[index]);
+                                  Navigator.pushNamed(
+                                      context, '/pescadoreditpage', arguments: {
+                                    'pescador': filtredPescadores[index]
+                                  });
                                 },
                                 icon: const Icon(
                                   Icons.edit,

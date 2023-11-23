@@ -28,15 +28,15 @@ class PescadorService {
   Future<List<Pescador>> getAll() async {
     return pescadores;
 
-    // final response = await http.get(Uri.parse(uri));
+    final response = await http.get(Uri.parse(uri));
 
-    // if (response.statusCode == 200) {
-    //   var pescadoresJson =
-    //       jsonDecode(response.body) as List<Map<String, dynamic>>;
-    //   return pescadoresJson.map((data) => Pescador.fromJson(data)).toList();
-    // } else {
-    //   throw Exception('Failed to load album');
-    // }
+    if (response.statusCode == 200) {
+      List<Json> jsonPescadores = toListOfJson(jsonDecode(response.body));
+
+      return jsonPescadores.map((data) => Pescador.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load Pescadores');
+    }
   }
 
   Future<Pescador> delete(Pescador pescador) async {
@@ -44,6 +44,7 @@ class PescadorService {
   }
 
   Future<Pescador> update(Pescador pescador) async {
-    throw Exception('update');
+    await Future.delayed(const Duration(milliseconds: 1000));
+    return pescador;
   }
 }

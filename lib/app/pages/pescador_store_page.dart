@@ -753,7 +753,9 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
           );
         }
 
-        return const CircularProgressIndicator(color: Colors.green);
+        return const Center(
+          child: CircularProgressIndicator(color: Colors.green),
+        );
       },
     );
   }
