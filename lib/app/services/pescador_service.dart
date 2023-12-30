@@ -1,6 +1,4 @@
-// import 'package:colonia/app/data/pescadores.dart';
 import 'package:colonia/app/models/pescador.dart';
-// import 'package:colonia/app/utils/setting_manager.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,9 +9,6 @@ class PescadorService {
   }
 
   Future<Pescador> save(Pescador pescador) async {
-    // await Future.delayed(const Duration(milliseconds: 1000));
-    // return pescador;
-
     final uri = await _getEndpoint();
     final response = await http.post(
       Uri.parse(uri),
@@ -63,7 +58,7 @@ class PescadorService {
 
   Future<Pescador> update(Pescador pescador) async {
     // await Future.delayed(const Duration(milliseconds: 1000));
-    return pescador;
+    // return pescador;
 
     final uri = await _getEndpoint();
 

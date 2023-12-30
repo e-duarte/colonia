@@ -1,16 +1,13 @@
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/pescador_service.dart';
-import 'package:colonia/app/services/report_service.dart';
 import 'package:colonia/app/widgets/report_widget.dart';
-import 'package:file_picker/file_picker.dart';
-// import 'package:colonia/app/utils/doc.dart';
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:colonia/app/widgets/functions_bar.dart';
 import 'package:colonia/app/widgets/settings.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key}); // color: Colors.amber,
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
