@@ -22,13 +22,13 @@ class Endereco {
   factory Endereco.fromJson(Map<String, dynamic> data) {
     return Endereco(
       municipio: data['municipio'],
-      ufAtual: data['ufAtual'],
+      ufAtual: data['uf'],
       cep: data['cep'],
       logradouro: data['logradouro'],
       bairro: data['bairro'],
       numero: data['numero'],
       complemento: data['complemento'],
-      fone: data['fone'],
+      fone: data['telefone'],
     );
   }
 

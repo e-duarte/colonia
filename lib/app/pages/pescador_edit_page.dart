@@ -1,6 +1,5 @@
 import 'package:colonia/app/models/dependente.dart';
 import 'package:colonia/app/models/pescador.dart';
-import 'package:colonia/app/models/endereco.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +16,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
   final _formKey = GlobalKey<FormState>();
   Future<Pescador>? _futurePescador;
 
-  String? nomeCompleto;
+  String? nome;
   String? apelido;
   String? pai;
   String? mae;
@@ -124,6 +123,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Row(
                       children: [
                         const SizedBox(
@@ -133,8 +135,8 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.nomeCompleto,
-                            onChanged: (value) => nomeCompleto = value,
+                            initialValue: pescador.nome,
+                            onChanged: (value) => nome = value,
                             maxLength: 50,
                             validator: validation,
                             decoration: inputStyle('Nome Completo'),
@@ -204,7 +206,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                                 String formattedDate =
                                     DateFormat('dd/MM/yyyy').format(pickedDate);
 
-                                print(nomeCompleto);
                                 setState(() {
                                   dataNascimento = formattedDate;
                                 });
@@ -690,7 +691,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Pescador updatePescador = pescador.copyWith(
-                            nomeCompleto: nomeCompleto,
+                            nome: nome,
                             apelido: apelido,
                             pai: pai,
                             mae: mae,

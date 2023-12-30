@@ -19,7 +19,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
 
   Future<Pescador>? _futurePescador;
 
-  String? nomeCompleto;
+  String? nome;
   String? apelido;
   String? pai;
   String? mae;
@@ -101,7 +101,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
     );
 
     var pescador = Pescador(
-      nomeCompleto: nomeCompleto!,
+      nome: nome!,
       apelido: apelido!,
       pai: pai!,
       mae: mae!,
@@ -157,8 +157,8 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: TextFormField(
                       key: UniqueKey(),
-                      initialValue: nomeCompleto,
-                      onChanged: (value) => nomeCompleto = value,
+                      initialValue: nome,
+                      onChanged: (value) => nome = value,
                       maxLength: 50,
                       validator: validation,
                       decoration: inputStyle('Nome Completo'),
@@ -227,7 +227,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                           String formattedDate =
                               DateFormat('dd/MM/yyyy').format(pickedDate);
 
-                          print(nomeCompleto);
                           setState(() {
                             dataNascimento = formattedDate;
                           });

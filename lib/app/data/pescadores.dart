@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 var pescadores = [
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -39,7 +39,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -73,7 +73,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -107,7 +107,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -141,7 +141,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -175,7 +175,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -209,7 +209,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -243,7 +243,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -277,7 +277,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -311,7 +311,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -345,7 +345,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -379,7 +379,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -413,7 +413,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',
@@ -447,7 +447,7 @@ var pescadores = [
     ],
   ),
   Pescador(
-    nomeCompleto: 'Joca',
+    nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
     mae: 'Maria',

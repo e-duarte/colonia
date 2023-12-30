@@ -5,7 +5,7 @@ class Dependente {
   Dependente({required this.nome, required this.fone});
 
   factory Dependente.fromJson(Map<String, dynamic> data) {
-    return Dependente(nome: data['nome'], fone: data['fone']);
+    return Dependente(nome: data['nome'], fone: data['telefone']);
   }
 
   Map<String, String> toJson() {

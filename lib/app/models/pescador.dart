@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class Pescador {
   int? id;
-  final String nomeCompleto;
+  final String nome;
   final String apelido;
   final String pai;
   final String mae;
@@ -34,7 +34,7 @@ class Pescador {
 
   Pescador({
     this.id,
-    required this.nomeCompleto,
+    required this.nome,
     required this.apelido,
     required this.pai,
     required this.mae,
@@ -60,37 +60,43 @@ class Pescador {
   });
 
   factory Pescador.fromJson(Map<String, dynamic> data) {
+    final dependentes = data['dependentes'] as List;
+    final dependentesConverted =
+        dependentes.map((e) => Dependente.fromJson(e)).toList();
+
+    // print(dependentesConverted);
+
     return Pescador(
       id: data['id'],
-      nomeCompleto: data['nomeCompleto'],
+      nome: data['nome'],
       apelido: data['apelido'],
       pai: data['pai'],
       mae: data['mae'],
       dataNascimento: DateFormat('dd/MM/yyyy').parse(data['nascimento']),
       naturalidade: data['naturalidade'],
-      ufNat: data['ufNat'],
+      ufNat: data['uf'],
       estadoCivil: data['estadoCivil'],
       conjuge: data['conjuge'],
       cpf: data['cpf'],
       rg: data['rg'],
-      endereco: data['endereco'],
+      endereco: Endereco.fromJson(data['endereco']),
       nit: data['nit'],
       cei: data['cei'],
-      pisCef: data['pisCef'],
+      pisCef: data['pisCEF'],
       ctps: data['ctps'],
       serie: data['serie'],
       rgp: data['rgp'],
       tituloEleitor: data['tituloEleitor'],
-      secao: data['secao'],
-      zona: data['zona'],
-      dependentes: data['dependentes'],
+      secao: data['secaoEleitor'],
+      zona: data['zonaEleitor'],
+      dependentes: dependentesConverted,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'nome': nomeCompleto,
+      'nome': nome,
       'apelido': apelido,
       'pai': pai,
       'mae': mae,
@@ -117,7 +123,7 @@ class Pescador {
 
   Pescador copyWith({
     int? id,
-    String? nomeCompleto,
+    String? nome,
     String? apelido,
     String? pai,
     String? mae,
@@ -143,7 +149,7 @@ class Pescador {
   }) {
     return Pescador(
       id: id ?? this.id,
-      nomeCompleto: nomeCompleto ?? this.nomeCompleto,
+      nome: nome ?? this.nome,
       apelido: apelido ?? this.apelido,
       pai: pai ?? this.pai,
       mae: mae ?? this.mae,
@@ -167,5 +173,10 @@ class Pescador {
       dependentes: dependentes ??
           this.dependentes.map((dependente) => dependente.copyWith()).toList(),
     );
+  }
+
+  @override
+  String toString() {
+    return nome;
   }
 }
