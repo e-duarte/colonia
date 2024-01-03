@@ -1,17 +1,15 @@
+import 'package:colonia/app/utils/utils.dart';
+import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:colonia/app/models/endereco.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/models/dependente.dart';
 import 'package:colonia/app/services/pescador_service.dart';
+import 'package:colonia/app/widgets/dependente_table.dart';
+import 'package:colonia/app/widgets/reply_message.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
-class PecadorStorePage extends StatefulWidget {
-  const PecadorStorePage({super.key});
-
-  @override
-  State<PecadorStorePage> createState() => _PecadorStorePageState();
-}
 
 class _PecadorStorePageState extends State<PecadorStorePage> {
   final _formKey = GlobalKey<FormState>();
@@ -51,40 +49,514 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
   String? secao;
   String? zona;
 
-  List<Map<String, String>> dependentes = [];
+  List<Map<String, dynamic>> dependentes = [];
 
   String? novoNomeDependente;
   String? novoFoneDependente;
 
-  InputDecoration inputStyle(String labelText) {
-    return InputDecoration(
-      labelText: labelText,
-      labelStyle: const TextStyle(color: Colors.green),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.green),
-      ),
-      border:
-          const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: (_futurePescador == null)
+          ? buildForm()
+          : ReplyMessage(
+              future: _futurePescador!,
+              message: 'Pescador salvo com sucesso',
+            ),
     );
   }
 
-  String? validation(String? value) {
-    if (value == null || value.isEmpty) {
-      return '*Campo obrigatório';
-    }
-
-    return null;
-  }
-
-  Widget getHorizontalSpacing() {
-    return SizedBox(
+  Form buildForm() {
+    final heigthSpacing = SizedBox(
       width: MediaQuery.of(context).size.width * 0.05,
     );
-  }
-
-  Widget getVerticalSpacing() {
-    return SizedBox(
+    final widthSpacing = SizedBox(
       height: MediaQuery.of(context).size.height * 0.03,
+    );
+
+    return Form(
+      key: _formKey,
+      child: StepController(
+        saveForm: savePescador,
+        tabs: tabs,
+        views: [
+          Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: nome,
+                      onChanged: (value) => nome = value,
+                      maxLength: 50,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Nome Completo'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: apelido,
+                      onChanged: (value) => apelido = value,
+                      maxLength: 15,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Apelido'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: pai,
+                      onChanged: (value) => pai = value,
+                      maxLength: 50,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Pai'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: mae,
+                      onChanged: (value) => mae = value,
+                      maxLength: 50,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Mãe'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: dataNascimento,
+                      onChanged: (value) => dataNascimento = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 10,
+                      decoration: inputStyle('Data de Nascimento'),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1980),
+                          lastDate: DateTime(2101),
+                        );
+
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('dd/MM/yyyy').format(pickedDate);
+
+                          setState(() {
+                            dataNascimento = formattedDate;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: naturalidade,
+                      onChanged: (value) => naturalidade = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 20,
+                      decoration: inputStyle('Naturalidade'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      onChanged: (value) => ufNat = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 2,
+                      decoration: inputStyle('UF'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: estadoCivil,
+                      onChanged: (value) => estadoCivil = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 15,
+                      decoration: inputStyle('Est. Civil'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: conjuge,
+                      onChanged: (value) => conjuge = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 50,
+                      decoration: inputStyle('Cônjuge'),
+                    ),
+                  ),
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue:
+                          cpf != null ? FieldFormatter.formatCPF(cpf!) : cpf,
+                      onChanged: (value) {
+                        cpf = value.replaceAll(RegExp(r'\.|-'), '');
+                      },
+                      validator: FieldValidator.checkCPF,
+                      maxLength: 14,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        CpfInputFormatter()
+                      ],
+                      decoration: inputStyle('CPF'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: rg,
+                      onChanged: (value) => rg = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('RG'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: municipio,
+                      onChanged: (value) => municipio = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 30,
+                      decoration: inputStyle('Município'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: ufAtual,
+                      onChanged: (value) => ufAtual = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 2,
+                      decoration: inputStyle('UF'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue:
+                          cep != null ? FieldFormatter.formatCEP(cep!) : cep,
+                      onChanged: (value) {
+                        cep = value.replaceAll(RegExp(r'\.|-'), '');
+                      },
+                      validator: FieldValidator.checkCEP,
+                      maxLength: 10,
+                      keyboardType: TextInputType.number,
+                      decoration: inputStyle('CEP'),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        CepInputFormatter(),
+                      ],
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: logradouro,
+                      onChanged: (value) => logradouro = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 50,
+                      decoration: inputStyle('Logradouro'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      onChanged: (value) => bairro = value,
+                      validator: FieldValidator.checkEmptyField,
+                      initialValue: bairro,
+                      maxLength: 20,
+                      decoration: inputStyle('Bairro'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      onChanged: (value) => numero = value,
+                      validator: FieldValidator.checkEmptyField,
+                      initialValue: numero,
+                      maxLength: 5,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('Nº'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: complemento,
+                      onChanged: (value) => complemento = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 50,
+                      decoration: inputStyle('Complemento'),
+                    ),
+                  ),
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: fone != null
+                          ? FieldFormatter.formatPhone(fone!)
+                          : fone,
+                      onChanged: (value) {
+                        fone = value.replaceAll(RegExp(r'\(|\)| |-'), '');
+                      },
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 15,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        TelefoneInputFormatter(),
+                      ],
+                      decoration: inputStyle('Fone'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: nit,
+                      onChanged: (value) => nit = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('NIT'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: cei,
+                      onChanged: (value) => cei = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 14,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('CEI'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: pisCef,
+                      onChanged: (value) => pisCef = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('PIS/CEF'),
+                    ),
+                  ),
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: ctps,
+                      onChanged: (value) => ctps = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('CTPS'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: serie,
+                      onChanged: (value) => serie = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 20,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('Série'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: rgp,
+                      onChanged: (value) => rgp = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 20,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('RGP'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: tituloEleitor,
+                      onChanged: (value) {
+                        tituloEleitor = value.replaceAll(' ', '');
+                      },
+                      validator: FieldValidator.checkTelefone,
+                      maxLength: 14,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        CartaoBancarioInputFormatter()
+                      ],
+                      decoration: inputStyle('Título de Eleitor'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: secao,
+                      onChanged: (value) => secao = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 4,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('Seção'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: zona,
+                      onChanged: (value) => zona = value,
+                      validator: FieldValidator.checkEmptyField,
+                      maxLength: 3,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('Zona'),
+                    ),
+                  ),
+                ],
+              ),
+              widthSpacing,
+              DependenteTable(
+                initDependentes: dependentes,
+                onChanged: (value) => dependentes = value,
+              ),
+            ],
+          ),
+        ],
+        validator: () {
+          return _formKey.currentState!.validate();
+        },
+      ),
     );
   }
 
@@ -124,7 +596,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       zona: zona!,
       dependentes: dependentes
           .map(
-            (e) => Dependente(nome: e['nome']!, fone: e['fone']!),
+            (e) => Dependente(nome: e['nome']!, fone: e['telefone']!),
           )
           .toList(),
     );
@@ -134,633 +606,16 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: (_futurePescador == null) ? buildForm() : buildFutureBuilder(),
-    );
-  }
-
-  Form buildForm() {
-    return Form(
-      key: _formKey,
-      child: StepController(
-        saveForm: savePescador,
-        tabs: tabs,
-        views: [
-          Column(
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: nome,
-                      onChanged: (value) => nome = value,
-                      maxLength: 50,
-                      validator: validation,
-                      decoration: inputStyle('Nome Completo'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: apelido,
-                      onChanged: (value) => apelido = value,
-                      maxLength: 15,
-                      validator: validation,
-                      decoration: inputStyle('Apelido'),
-                    ),
-                  )
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: pai,
-                      onChanged: (value) => pai = value,
-                      maxLength: 50,
-                      validator: validation,
-                      decoration: inputStyle('Pai'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: mae,
-                      onChanged: (value) => mae = value,
-                      maxLength: 50,
-                      validator: validation,
-                      decoration: inputStyle('Mãe'),
-                    ),
-                  )
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: dataNascimento,
-                      onChanged: (value) => dataNascimento = value,
-                      validator: validation,
-                      maxLength: 10,
-                      decoration: inputStyle('Data de Nascimento'),
-                      readOnly: true,
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1980),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (pickedDate != null) {
-                          String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(pickedDate);
-
-                          setState(() {
-                            dataNascimento = formattedDate;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: naturalidade,
-                      onChanged: (value) => naturalidade = value,
-                      validator: validation,
-                      maxLength: 20,
-                      decoration: inputStyle('Naturalidade'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => ufNat = value,
-                      validator: validation,
-                      maxLength: 2,
-                      decoration: inputStyle('UF'),
-                    ),
-                  )
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: estadoCivil,
-                      onChanged: (value) => estadoCivil = value,
-                      validator: validation,
-                      maxLength: 15,
-                      decoration: inputStyle('Est. Civil'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: conjuge,
-                      onChanged: (value) => conjuge = value,
-                      validator: validation,
-                      maxLength: 50,
-                      decoration: inputStyle('Cônjuge'),
-                    ),
-                  ),
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: cpf,
-                      onChanged: (value) => cpf = value,
-                      validator: validation,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('CPF'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: rg,
-                      onChanged: (value) => rg = value,
-                      validator: validation,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('RG'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: municipio,
-                      onChanged: (value) => municipio = value,
-                      validator: validation,
-                      maxLength: 30,
-                      decoration: inputStyle('Município'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => ufAtual = value,
-                      validator: validation,
-                      maxLength: 2,
-                      decoration: inputStyle('UF'),
-                    ),
-                  )
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => cep = value,
-                      validator: validation,
-                      initialValue: cep,
-                      maxLength: 8,
-                      keyboardType: TextInputType.number,
-                      decoration: inputStyle('CEP'),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.55,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: logradouro,
-                      onChanged: (value) => logradouro = value,
-                      validator: validation,
-                      maxLength: 50,
-                      decoration: inputStyle('Logradouro'),
-                    ),
-                  )
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => bairro = value,
-                      validator: validation,
-                      initialValue: bairro,
-                      maxLength: 20,
-                      decoration: inputStyle('Bairro'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => numero = value,
-                      validator: validation,
-                      initialValue: numero,
-                      maxLength: 5,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Nº'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: complemento,
-                      onChanged: (value) => complemento = value,
-                      validator: validation,
-                      maxLength: 50,
-                      decoration: inputStyle('Complemento'),
-                    ),
-                  ),
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: fone,
-                      onChanged: (value) => fone = value,
-                      validator: validation,
-                      maxLength: 15,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Fone'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: nit,
-                      onChanged: (value) => nit = value,
-                      validator: validation,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('NIT'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: cei,
-                      onChanged: (value) => cei = value,
-                      validator: validation,
-                      maxLength: 14,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('CEI'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: pisCef,
-                      onChanged: (value) => pisCef = value,
-                      validator: validation,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('PIS/CEF'),
-                    ),
-                  ),
-                ],
-              ),
-              getVerticalSpacing(),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: ctps,
-                      onChanged: (value) => ctps = value,
-                      validator: validation,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('CTPS'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: serie,
-                      onChanged: (value) => serie = value,
-                      validator: validation,
-                      maxLength: 20,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Série'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: rgp,
-                      onChanged: (value) => rgp = value,
-                      validator: validation,
-                      maxLength: 20,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('RGP'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: tituloEleitor,
-                      onChanged: (value) => tituloEleitor = value,
-                      validator: validation,
-                      maxLength: 12,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Título de Eleitor'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: secao,
-                      onChanged: (value) => secao = value,
-                      validator: validation,
-                      maxLength: 4,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Seção'),
-                    ),
-                  ),
-                  getHorizontalSpacing(),
-                  Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: zona,
-                      onChanged: (value) => zona = value,
-                      validator: validation,
-                      maxLength: 3,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('Zona'),
-                    ),
-                  ),
-                ],
-              ),
-              getVerticalSpacing(),
-              const Text(
-                'Dependentes',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              getVerticalSpacing(),
-              ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.4,
-                    minHeight: MediaQuery.of(context).size.height * 0.1,
-                  ),
-                  child: ListView(
-                    children: [
-                      Table(
-                        border: TableBorder.all(),
-                        children: [
-                          TableRow(
-                            children: [
-                              Container(
-                                color: Colors.grey[100],
-                                padding: const EdgeInsets.all(8),
-                                child: const Text(
-                                  'Nome',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                color: Colors.grey[100],
-                                padding: const EdgeInsets.all(8),
-                                child: const Text(
-                                  'Fone',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          ...dependentes.map((d) {
-                            return TableRow(children: [
-                              Container(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: TextFormField(
-                                  initialValue: d['nome'],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: TextFormField(
-                                  initialValue: d['fone'],
-                                ),
-                              )
-                            ]);
-                          }).toList(),
-                          TableRow(children: [
-                            Container(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: TextFormField(
-                                key: UniqueKey(),
-                                onChanged: (value) =>
-                                    novoNomeDependente = value,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: TextFormField(
-                                key: UniqueKey(),
-                                onChanged: (value) =>
-                                    novoFoneDependente = value,
-                              ),
-                            )
-                          ])
-                        ],
-                      )
-                    ],
-                  )),
-              getVerticalSpacing(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        dependentes.add({
-                          'nome': novoNomeDependente!,
-                          'fone': novoFoneDependente!,
-                        });
-                      });
-                    },
-                    child: const Text('Adicionar'),
-                  )
-                ],
-              )
-            ],
-          ),
-        ],
-        validator: () {
-          return _formKey.currentState!.validate();
-        },
+  InputDecoration inputStyle(String labelText) {
+    return InputDecoration(
+      labelText: labelText,
+      labelStyle: const TextStyle(color: Colors.green),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.green),
       ),
+      border:
+          const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
     );
-  }
-
-  FutureBuilder buildFutureBuilder() {
-    return FutureBuilder<Pescador>(
-      future: _futurePescador,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Pescador Salvo com sucesso!',
-                  style: TextStyle(fontSize: 30),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  onPressed: closeForm,
-                  child: const Text('Fechar'),
-                )
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              children: [
-                Text('${snapshot.error}'),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  onPressed: closeForm,
-                  child: const Text('Fechar'),
-                ),
-              ],
-            ),
-          );
-        }
-
-        return const Center(
-          child: CircularProgressIndicator(color: Colors.green),
-        );
-      },
-    );
-  }
-
-  void closeForm() {
-    Navigator.popAndPushNamed(context, '/homepage');
   }
 }
 
@@ -783,7 +638,7 @@ class StepController extends StatefulWidget {
 }
 
 class _StepControllerState extends State<StepController> {
-  int activeTab = 0;
+  int activeTab = 3;
 
   void nextView() {
     setState(() {
@@ -816,17 +671,9 @@ class _StepControllerState extends State<StepController> {
             width: MediaQuery.of(context).size.width * 0.8,
             child: Stack(
               children: [
-                Positioned(
+                const Positioned(
                   left: 0,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: () {
-                      Navigator.popAndPushNamed(context, '/homepage');
-                    },
-                    child: const Text('Fechar'),
-                  ),
+                  child: CloseButtonWidget(),
                 ),
                 if (activeTab == widget.views.length - 1)
                   Positioned.fill(
@@ -868,9 +715,9 @@ class _StepControllerState extends State<StepController> {
 
 class StepBar extends StatelessWidget {
   const StepBar({
+    super.key,
     required this.tabs,
     required this.activeTab,
-    super.key,
   });
 
   final List<String> tabs;
@@ -913,4 +760,11 @@ class StepBar extends StatelessWidget {
       }).toList(),
     );
   }
+}
+
+class PecadorStorePage extends StatefulWidget {
+  const PecadorStorePage({super.key});
+
+  @override
+  State<PecadorStorePage> createState() => _PecadorStorePageState();
 }

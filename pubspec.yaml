@@ -19,10 +19,10 @@ dependencies:
   data_table_2: ^2.5.8
   http: ^1.1.0
   desktop_multi_window: ^0.2.0
-  syncfusion_flutter_pdf: ^23.2.4
   file_picker: ^6.1.1
-  url_launcher: ^6.1.14
   open_filex: ^4.3.4
+  brasil_fields: ^1.14.1
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

@@ -26,8 +26,6 @@ class PescadorService {
   }
 
   Future<List<Pescador>> getAll() async {
-    // return pescadores;
-
     final uri = await _getEndpoint();
 
     final response = await http.get(Uri.parse(uri));
@@ -57,9 +55,6 @@ class PescadorService {
   }
 
   Future<Pescador> update(Pescador pescador) async {
-    // await Future.delayed(const Duration(milliseconds: 1000));
-    // return pescador;
-
     final uri = await _getEndpoint();
 
     final response = await http.put(
@@ -67,10 +62,10 @@ class PescadorService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
-      body: pescador.toJson(),
+      body: jsonEncode(pescador.toJson()),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return pescador;
     } else {
       throw Exception('Failed to update Pescador');

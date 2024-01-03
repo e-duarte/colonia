@@ -1,6 +1,7 @@
 import 'package:colonia/app/models/payment.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/payment_service.dart';
+import 'package:colonia/app/widgets/buttons.dart';
 import 'package:colonia/app/widgets/date_field.dart';
 import 'package:colonia/app/widgets/payment_table.dart';
 import 'package:flutter/material.dart';
@@ -82,18 +83,10 @@ class _PaymentPageState extends State<PaymentPage> {
                       child: const Text('Pagar'),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     right: 0,
                     top: 15,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.popAndPushNamed(context, '/homepage');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      child: const Text('Fechar'),
-                    ),
+                    child: CloseButtonWidget(),
                   ),
                 ],
               ),

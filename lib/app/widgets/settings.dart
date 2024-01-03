@@ -1,4 +1,5 @@
 import 'package:colonia/app/utils/setting_manager.dart';
+import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class _SettingState extends State<Setting> {
@@ -43,11 +44,7 @@ class _SettingState extends State<Setting> {
           },
         ),
         actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Fechar'),
-          ),
+          const CloseButtonWidget(),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {

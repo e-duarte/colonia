@@ -33,7 +33,7 @@ class PaymentTable extends StatelessWidget {
           final dates = snapshot.data!.map((e) => e.paymentDate).toList();
           return dates.isNotEmpty
               ? _buildTable(dates, columns)
-              : Text('Nenhum pagamento');
+              : const Text('Nenhum pagamento');
         } else if (snapshot.hasError) {
           return const Center(
             child: Text('Falha em carregar pagamentos'),

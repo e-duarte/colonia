@@ -1,4 +1,5 @@
 class Endereco {
+  final int? id;
   final String municipio;
   final String ufAtual;
   final String cep;
@@ -9,6 +10,7 @@ class Endereco {
   final String fone;
 
   Endereco({
+    this.id,
     required this.municipio,
     required this.ufAtual,
     required this.cep,
@@ -21,6 +23,7 @@ class Endereco {
 
   factory Endereco.fromJson(Map<String, dynamic> data) {
     return Endereco(
+      id: data['id'],
       municipio: data['municipio'],
       ufAtual: data['uf'],
       cep: data['cep'],
@@ -32,8 +35,9 @@ class Endereco {
     );
   }
 
-  Map<String, String> toJson() {
+  Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'municipio': municipio,
       'uf': ufAtual,
       'cep': cep,
@@ -46,6 +50,7 @@ class Endereco {
   }
 
   Endereco copyWith({
+    int? id,
     String? municipio,
     String? ufAtual,
     String? cep,
@@ -56,6 +61,7 @@ class Endereco {
     String? fone,
   }) {
     return Endereco(
+      id: id ?? this.id,
       municipio: municipio ?? this.municipio,
       ufAtual: ufAtual ?? this.ufAtual,
       cep: cep ?? this.cep,
