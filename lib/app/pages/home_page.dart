@@ -1,4 +1,5 @@
 import 'package:colonia/app/models/pescador.dart';
+import 'package:colonia/app/pages/payment_page.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/utils/setting_manager.dart';
 import 'package:colonia/app/widgets/buttons.dart';
@@ -206,10 +207,10 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         onPressed: (selectedPescador != null)
                             ? () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/pagamentopage',
-                                  arguments: selectedPescador,
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      PaymentPage(pescador: selectedPescador!),
                                 );
                               }
                             : null,

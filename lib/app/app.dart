@@ -1,5 +1,4 @@
 import 'package:colonia/app/pages/home_page.dart';
-import 'package:colonia/app/pages/payment_page.dart';
 import 'package:colonia/app/pages/pescador_edit_page.dart';
 import 'package:colonia/app/pages/pescador_store_page.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ class App extends StatelessWidget {
         '/homepage': (context) => const HomePage(),
         '/pescadorstorepage': (context) => const PecadorStorePage(),
         '/pescadoreditpage': (context) => const PescadorEditPage(),
-        '/pagamentopage': (context) => const PaymentPage(),
       },
     );
   }

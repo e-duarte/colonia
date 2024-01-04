@@ -15,8 +15,8 @@ class Payment {
 
   Map<String, dynamic> toJson() {
     return {
-      'pescadorId': pescador!.id,
-      'paymentDate': DateFormat('dd/MM/yyyy').format(paymentDate),
+      'pescador': pescador!.id,
+      'data': DateFormat('dd/MM/yyyy').format(paymentDate),
     };
   }
 }

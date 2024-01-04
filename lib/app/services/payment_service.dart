@@ -24,6 +24,8 @@ class PaymentService {
 
   Future<Payment> save(Payment payment) async {
     final uri = await _getEndpoint();
+
+    print(jsonEncode(payment.toJson()));
     final response = await http.post(
       Uri.parse(uri),
       headers: <String, String>{

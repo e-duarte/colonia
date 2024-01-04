@@ -13,98 +13,84 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final pescador = ModalRoute.of(context)!.settings.arguments as Pescador;
+    return AlertDialog(
+      title: Text(
+        'PAGAMENTOS: ${widget.pescador.nome.toUpperCase()}',
+        style: const TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      content: Builder(
+        builder: (context) {
+          var height = MediaQuery.of(context).size.height * 0.6;
+          var width = MediaQuery.of(context).size.width * 0.9;
 
-    return Scaffold(
-      body: (futurePayment == null)
-          ? _buildPaymentPage(pescador)
-          : _buildFutureBuild(pescador),
+          return SizedBox(
+            height: height,
+            width: width,
+            child: (futurePayment == null)
+                ? _buildPaymentPage()
+                : _buildFutureBuild(),
+          );
+        },
+      ),
+      actions: [
+        SizedBox(
+          height: 30,
+          width: 200,
+          child: DateField(
+            initValue: paymentDate,
+            handle: (value) {
+              setState(() {
+                paymentDate = value;
+              });
+            },
+          ),
+        ),
+        // Spacer(),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              final payment = Payment(
+                  pescador: widget.pescador,
+                  paymentDate: DateFormat('dd/MM/yyyy').parse(paymentDate));
+              futurePayment = PaymentService().save(payment);
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+          ),
+          child: const Text('Pagar'),
+        ),
+        const CloseButtonWidget()
+      ],
     );
   }
 
-  Widget _buildPaymentPage(Pescador pescador) {
+  Widget _buildPaymentPage() {
     return SizedBox(
       width: double.infinity,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.03,
-          horizontal: MediaQuery.of(context).size.width * 0.02,
-        ),
-        child: Column(
-          children: [
-            const Text(
-              'Pagamentos',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: PaymentTable(pescador),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 15,
-                    child: SizedBox(
-                      height: 30,
-                      width: 200,
-                      child: DateField(
-                        initValue: paymentDate,
-                        handle: (value) {
-                          setState(() {
-                            paymentDate = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 210,
-                    top: 15,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          final payment = Payment(
-                              pescador: pescador,
-                              paymentDate:
-                                  DateFormat('dd/MM/yyyy').parse(paymentDate));
-                          futurePayment = PaymentService().save(payment);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      child: const Text('Pagar'),
-                    ),
-                  ),
-                  const Positioned(
-                    right: 0,
-                    top: 15,
-                    child: CloseButtonWidget(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          // const SizedBox(height: 10),
+          Expanded(
+            child: PaymentTable(widget.pescador),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildFutureBuild(Pescador pescador) {
+  Widget _buildFutureBuild() {
     return FutureBuilder(
       future: futurePayment,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           futurePayment = null;
-          return _buildPaymentPage(pescador);
+          return _buildPaymentPage();
         } else if (snapshot.hasError) {
+          print(snapshot.error);
           return _buildErroMessage();
         }
 
@@ -140,7 +126,9 @@ class _PaymentPageState extends State<PaymentPage> {
 }
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  const PaymentPage({super.key, required this.pescador});
+
+  final Pescador pescador;
 
   @override
   _PaymentPageState createState() => _PaymentPageState();
