@@ -270,6 +270,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomBar() {
+    const widthSpacing = SizedBox(width: 10);
     return FutureBuilder(
       future: SettingService.loadData(),
       builder: (context, snapshot) {
@@ -286,15 +287,15 @@ class _HomePageState extends State<HomePage> {
                         icon: Icons.supervised_user_circle_outlined,
                         text: setting['user'],
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                      widthSpacing,
                       InfoButton(
                         icon: Icons.connected_tv_outlined,
                         text: '${setting["host"]}:${setting["port"]}',
                       ),
-                      const SizedBox(
-                        width: 10,
+                      const Spacer(),
+                      Text(
+                        'Total de ${filtredPescadores.length} Pescadores ~ Develop By Xingu App',
+                        style: const TextStyle(color: Colors.white54),
                       ),
                     ],
                   )

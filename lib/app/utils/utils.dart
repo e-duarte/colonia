@@ -27,7 +27,7 @@ class FieldValidator {
   }
 
   static String? checkTitulo(String? titulo) {
-    final pattern = RegExp(r'(\d{4})(\d{4})(\d{4})');
+    final pattern = RegExp(r'(\d{4}) (\d{4}) (\d{4})');
     if (!pattern.hasMatch(titulo!)) return '*Título inválido';
     return null;
   }

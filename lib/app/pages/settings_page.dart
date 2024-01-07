@@ -1,4 +1,5 @@
 import 'package:colonia/app/services/setting_service.dart';
+import 'package:colonia/app/utils/utils.dart';
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
@@ -51,18 +52,7 @@ class _SettingState extends State<Setting> {
         actions: [
           const CloseButtonWidget(),
           ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                await SettingService.saveData({
-                  'user': _user,
-                  'host': _host,
-                  'port': _port,
-                });
-
-                if (!mounted) return;
-                Navigator.of(context).pop();
-              }
-            },
+            onPressed: _saveSettings,
             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             child: const Text('Salvar', style: TextStyle(color: Colors.white)),
           ),
@@ -78,33 +68,41 @@ class _SettingState extends State<Setting> {
           key: UniqueKey(),
           initialValue: _user,
           onChanged: (value) => _user = value,
-          validator: validation,
+          validator: FieldValidator.checkEmptyField,
           decoration: const InputDecoration(label: Text('User')),
+          onEditingComplete: _saveSettings,
         ),
         TextFormField(
           key: UniqueKey(),
           initialValue: _host,
           onChanged: (value) => _host = value,
-          validator: validation,
+          validator: FieldValidator.checkEmptyField,
           decoration: const InputDecoration(label: Text('host')),
+          onEditingComplete: _saveSettings,
         ),
         TextFormField(
           key: UniqueKey(),
           initialValue: _port,
           onChanged: (value) => _port = value,
-          validator: validation,
+          validator: FieldValidator.checkEmptyField,
           decoration: const InputDecoration(label: Text('porta')),
+          onEditingComplete: _saveSettings,
         ),
       ],
     );
   }
 
-  String? validation(String? value) {
-    if (value == null || value.isEmpty) {
-      return '*Campo obrigatório';
-    }
+  void _saveSettings() async {
+    if (_formKey.currentState!.validate()) {
+      await SettingService.saveData({
+        'user': _user,
+        'host': _host,
+        'port': _port,
+      });
 
-    return null;
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    }
   }
 }
 

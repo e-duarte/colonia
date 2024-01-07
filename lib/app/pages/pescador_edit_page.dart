@@ -122,6 +122,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Nome Completo'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -133,6 +136,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             maxLength: 15,
                             validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Apelido'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         )
                       ],
@@ -148,6 +154,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Pai'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -159,6 +168,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Mãe'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         )
                       ],
@@ -175,6 +187,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 10,
                             decoration: inputStyle('Data de Nascimento'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                             readOnly: true,
                             onTap: () async {
                               DateTime? pickedDate = await showDatePicker(
@@ -205,6 +220,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 20,
                             decoration: inputStyle('Naturalidade'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -216,6 +234,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 2,
                             decoration: inputStyle('UF'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         )
                       ],
@@ -231,6 +252,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 15,
                             decoration: inputStyle('Est. Civil'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -243,6 +267,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Cônjuge'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -267,6 +294,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               CpfInputFormatter(),
                             ],
                             decoration: inputStyle('CPF'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -283,6 +313,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('RG'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -299,6 +332,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 30,
                             decoration: inputStyle('Município'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -310,6 +346,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 2,
                             decoration: inputStyle('UF'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         )
                       ],
@@ -329,6 +368,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             maxLength: 10,
                             keyboardType: TextInputType.number,
                             decoration: inputStyle('CEP'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly,
                               CepInputFormatter()
@@ -345,6 +387,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Logradouro'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         )
                       ],
@@ -360,6 +405,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             initialValue: pescador.endereco.bairro,
                             maxLength: 20,
                             decoration: inputStyle('Bairro'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -376,6 +424,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('Nº'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -387,6 +438,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Complemento'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -411,6 +465,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               TelefoneInputFormatter(),
                             ],
                             decoration: inputStyle('Fone'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -430,6 +487,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('NIT'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -445,6 +505,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('CEI'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -460,6 +523,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('PIS/CEF'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -479,6 +545,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('CTPS'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -494,6 +563,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('Série'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -509,6 +581,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('RGP'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
@@ -533,6 +608,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               CartaoBancarioInputFormatter(),
                             ],
                             decoration: inputStyle('Título de Eleitor'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -548,6 +626,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('Seção'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                         heigthSpacing,
@@ -563,6 +644,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: inputStyle('Zona'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
                           ),
                         ),
                       ],
