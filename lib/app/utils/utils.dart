@@ -1,4 +1,4 @@
-import 'package:colonia/app/utils/setting_manager.dart';
+import 'package:colonia/app/services/setting_service.dart';
 import 'package:get/get.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -75,7 +75,7 @@ class FieldFormatter {
 
 class Network {
   Future<String> getUri() async {
-    final settings = await SettingManager.loadSetting();
+    final settings = await SettingService.loadData();
     final uri = 'http://${settings["host"]}:${settings["port"]}';
 
     return uri;

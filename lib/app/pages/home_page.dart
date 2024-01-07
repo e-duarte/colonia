@@ -1,20 +1,13 @@
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/pages/payment_page.dart';
 import 'package:colonia/app/services/pescador_service.dart';
-import 'package:colonia/app/utils/setting_manager.dart';
+import 'package:colonia/app/services/setting_service.dart';
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:colonia/app/widgets/report_widget.dart';
 import 'package:colonia/app/widgets/pescador_table.dart';
 import 'package:flutter/material.dart';
 import 'package:colonia/app/widgets/functions_bar.dart';
-import 'package:colonia/app/widgets/settings.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+import 'package:colonia/app/pages/settings_page.dart';
 
 class _HomePageState extends State<HomePage> {
   List<Pescador> pescadores = [];
@@ -22,10 +15,31 @@ class _HomePageState extends State<HomePage> {
   bool reload = true;
   Pescador? selectedPescador;
   int? selectPescadorIndex;
-  Map<String, dynamic>? setting;
+  bool isDataLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SettingService.loadSharedPreferences().then((value) {
+      setState(() {
+        isDataLoaded = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildFunctionsBar(),
+      body: isDataLoaded
+          ? _buildTable()
+          : const CircularProgressIndicator(color: Colors.green),
+      bottomNavigationBar: isDataLoaded ? _buildBottomBar() : Container(),
+    );
+  }
+
+  Widget _buildTable() {
     const leftPadding = 50.0;
     const rightPadding = 50.0;
     const bottomPadding = 50.0;
@@ -40,91 +54,51 @@ class _HomePageState extends State<HomePage> {
       'Ações'
     ];
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _buildFunctionsBar(),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: leftPadding,
-          right: rightPadding,
-          bottom: bottomPadding,
-          top: topPadding,
-        ),
-        child: FutureBuilder(
-          future: PescadorService().getAll(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (reload) initVars(snapshot.data!);
-
-              return PescadorTable(
-                columns: columns,
-                pescadores: filtredPescadores,
-                selectedPescador: selectPescadorIndex,
-                handleTable: selectPescador,
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error em carregar pescadores'),
-              );
-            } else {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      color: Colors.green,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Carregando Pescadores',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: leftPadding,
+        right: rightPadding,
+        bottom: bottomPadding,
+        top: topPadding,
       ),
-      bottomNavigationBar: _buildBottomBar(),
+      child: FutureBuilder(
+        future: PescadorService().getAll(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (reload) initVars(snapshot.data!);
+
+            return PescadorTable(
+              columns: columns,
+              pescadores: filtredPescadores,
+              selectedPescador: selectPescadorIndex,
+              handleTable: selectPescador,
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('Error em carregar pescadores'),
+            );
+          } else {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Carregando Pescadores',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
     );
-  }
-
-  void initVars(List<Pescador> pescadores) {
-    this.pescadores = pescadores;
-    filtredPescadores = this.pescadores;
-    reload = false;
-
-    SettingManager.loadSetting().then((value) {
-      setState(() {
-        setting = value;
-      });
-    });
-  }
-
-  void filterPescadores(String value) {
-    setState(() {
-      if (value.isEmpty) {
-        filtredPescadores = pescadores;
-      } else {
-        filtredPescadores = pescadores
-            .where((Pescador p) =>
-                p.nome.toLowerCase().contains(value.toLowerCase()))
-            .toList();
-      }
-
-      selectPescadorIndex = null;
-    });
-  }
-
-  void selectPescador(index) {
-    setState(() {
-      selectPescadorIndex = (index == selectPescadorIndex) ? null : index;
-      selectedPescador =
-          (selectPescadorIndex != null) ? filtredPescadores[index!] : null;
-    });
   }
 
   FuctionsBar _buildFunctionsBar() {
@@ -194,7 +168,17 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       IconButton(
-                        onPressed: (selectedPescador != null) ? () {} : null,
+                        onPressed: (selectedPescador != null)
+                            ? () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => ReportWidget(
+                                    pescador: selectedPescador!,
+                                    type: 'inss',
+                                  ),
+                                );
+                              }
+                            : null,
                         icon: const Icon(Icons.print),
                         iconSize: 30,
                       ),
@@ -278,30 +262,78 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: MediaQuery.of(context).size.height * 0.032,
-      color: Colors.black87,
-      child: setting != null
-          ? Row(
-              children: [
-                InfoButton(
-                  icon: Icons.supervised_user_circle_outlined,
-                  text: setting!['user'],
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                InfoButton(
-                  icon: Icons.connected_tv_outlined,
-                  text: '${setting!["host"]}:${setting!["port"]}',
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-              ],
-            )
-          : Container(),
+    return FutureBuilder(
+      future: SettingService.loadData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final setting = snapshot.data;
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height: MediaQuery.of(context).size.height * 0.032,
+            color: Colors.black87,
+            child: setting != null
+                ? Row(
+                    children: [
+                      InfoButton(
+                        icon: Icons.supervised_user_circle_outlined,
+                        text: setting['user'],
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      InfoButton(
+                        icon: Icons.connected_tv_outlined,
+                        text: '${setting["host"]}:${setting["port"]}',
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  )
+                : Container(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        } else {
+          return Container();
+        }
+      },
     );
   }
+
+  void initVars(List<Pescador> pescadores) {
+    this.pescadores = pescadores;
+    filtredPescadores = this.pescadores;
+    reload = false;
+  }
+
+  void filterPescadores(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        filtredPescadores = pescadores;
+      } else {
+        filtredPescadores = pescadores
+            .where((Pescador p) =>
+                p.nome.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      }
+
+      selectPescadorIndex = null;
+    });
+  }
+
+  void selectPescador(index) {
+    setState(() {
+      selectPescadorIndex = (index == selectPescadorIndex) ? null : index;
+      selectedPescador =
+          (selectPescadorIndex != null) ? filtredPescadores[index!] : null;
+    });
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
 }

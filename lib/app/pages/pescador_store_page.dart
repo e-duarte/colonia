@@ -638,7 +638,7 @@ class StepController extends StatefulWidget {
 }
 
 class _StepControllerState extends State<StepController> {
-  int activeTab = 3;
+  int activeTab = 0;
 
   void nextView() {
     setState(() {
