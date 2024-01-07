@@ -61,7 +61,10 @@ class _PaymentPageState extends State<PaymentPage> {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
           ),
-          child: const Text('Pagar'),
+          child: const Text(
+            'Pagar',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         const CloseButtonWidget()
       ],

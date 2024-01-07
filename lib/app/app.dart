@@ -10,6 +10,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // theme: ThemeData(
+      //   textTheme: TextTheme(
+      //     bodyLarge: TextStyle(color: Colors.white), // Cor do texto global
+      //     bodyText2: TextStyle(color: Colors.white), // Cor do texto global
+      //     // Adicione mais estilos conforme necessário
+      //   ),
+      // ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

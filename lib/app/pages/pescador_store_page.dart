@@ -686,7 +686,8 @@ class _StepControllerState extends State<StepController> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: widget.saveForm,
-                        child: const Text('salvar'),
+                        child: const Text('salvar',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -701,7 +702,8 @@ class _StepControllerState extends State<StepController> {
                     ),
                     onPressed:
                         activeTab == widget.views.length - 1 ? null : nextView,
-                    child: const Text('Próximo'),
+                    child: const Text('Próximo',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 )
               ],

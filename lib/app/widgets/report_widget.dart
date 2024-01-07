@@ -80,7 +80,8 @@ class ReportWidget extends StatelessWidget {
                   OpenFilex.open(filePath);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
-                child: const Text('abrir'),
+                child:
+                    const Text('abrir', style: TextStyle(color: Colors.white)),
               ),
           ],
         )

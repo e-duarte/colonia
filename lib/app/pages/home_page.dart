@@ -8,6 +8,7 @@ import 'package:colonia/app/widgets/pescador_table.dart';
 import 'package:flutter/material.dart';
 import 'package:colonia/app/widgets/functions_bar.dart';
 import 'package:colonia/app/pages/settings_page.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 class _HomePageState extends State<HomePage> {
   List<Pescador> pescadores = [];
@@ -24,6 +25,13 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isDataLoaded = true;
       });
+    });
+
+    doWhenWindowReady(() {
+      const initialSize = Size(1200, 768);
+      appWindow.minSize = initialSize;
+      // appWindow.size = initialSize;
+      // appWindow.maxSize = initialSize;
     });
   }
 

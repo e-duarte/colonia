@@ -8,7 +8,10 @@ class CloseButtonWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => Navigator.pop(context),
       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-      child: const Text('Fechar'),
+      child: const Text(
+        'Fechar',
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 }
