@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
     doWhenWindowReady(() {
       const initialSize = Size(1200, 768);
       appWindow.minSize = initialSize;
+      appWindow.title = 'Colônia de Pesca';
       // appWindow.size = initialSize;
       // appWindow.maxSize = initialSize;
     });

@@ -15,6 +15,7 @@ class _SettingState extends State<Setting> {
       key: _formKey,
       child: AlertDialog(
         title: const Text('CONFIGURAÇÕES'),
+        backgroundColor: Colors.white,
         content: Builder(
           builder: (context) {
             var height = MediaQuery.of(context).size.height * 0.3;
