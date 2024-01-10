@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/utils/utils.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,7 +24,8 @@ class ReportService {
 
       return filePath;
     } else {
-      throw Exception('Failed to load Pescadores');
+      throw Exception(
+          'Failed to load Pescadores. Status: ${response.statusCode}');
     }
   }
 }

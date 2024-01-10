@@ -83,8 +83,8 @@ class _HomePageState extends State<HomePage> {
               handleTable: selectPescador,
             );
           } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error em carregar pescadores'),
+            return Center(
+              child: Text('Error em carregar pescadores. ${snapshot.error}'),
             );
           } else {
             return SizedBox(
