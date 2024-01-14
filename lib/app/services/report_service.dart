@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/utils/utils.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,7 +15,9 @@ class ReportService {
 
     final response = await http.get(Uri.parse('$uri/$type/${pescador.id}'));
     if (response.statusCode == 200) {
-      final filePath = '$dirPath/${pescador.nome}_requerimento.pdf';
+      var formatedDate =
+          '${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}${DateTime.now().millisecondsSinceEpoch}';
+      final filePath = '$dirPath/${pescador.nome}_${type}_$formatedDate.pdf';
       var bytes = base64Decode(response.body);
       final file = File(filePath);
       await file.writeAsBytes(bytes.buffer.asUint8List());
