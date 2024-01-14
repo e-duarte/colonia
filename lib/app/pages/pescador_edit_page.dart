@@ -265,7 +265,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             key: UniqueKey(),
                             initialValue: pescador.conjuge,
                             onChanged: (value) => conjuge = value,
-                            validator: FieldValidator.checkEmptyField,
+                            // validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Cônjuge'),
                             onEditingComplete: () {
