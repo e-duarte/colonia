@@ -22,22 +22,30 @@ class PaymentService {
     }
   }
 
-  Future<Payment> save(Payment payment) async {
-    final uri = await _getEndpoint();
+  Future<Payment> save(Pescador pescador, Payment payment) async {
+    var payments = await getAll(pescador);
+    var exist =
+        payments.where((p) => p.paymentDate.month == payment.paymentDate.month);
 
-    print(jsonEncode(payment.toJson()));
-    final response = await http.post(
-      Uri.parse(uri),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(payment.toJson()),
-    );
+    if (exist.isEmpty) {
+      final uri = await _getEndpoint();
 
-    if (response.statusCode == 201) {
-      return payment;
+      final response = await http.post(
+        Uri.parse(uri),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(payment.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        return payment;
+      } else {
+        throw Exception('Failed to create Payment.');
+      }
     } else {
-      throw Exception('Failed to create Payment.');
+      print('exist');
+      return payment;
     }
   }
 }

@@ -53,9 +53,10 @@ class _PaymentPageState extends State<PaymentPage> {
           onPressed: () {
             setState(() {
               final payment = Payment(
-                  pescador: widget.pescador,
-                  paymentDate: DateFormat('dd/MM/yyyy').parse(paymentDate));
-              futurePayment = PaymentService().save(payment);
+                pescador: widget.pescador,
+                paymentDate: DateFormat('dd/MM/yyyy').parse(paymentDate),
+              );
+              futurePayment = PaymentService().save(widget.pescador, payment);
             });
           },
           style: ElevatedButton.styleFrom(

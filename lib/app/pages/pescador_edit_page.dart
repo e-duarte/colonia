@@ -237,6 +237,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
+                            inputFormatters: [UpperCaseTextFormatter()],
                           ),
                         )
                       ],
@@ -349,6 +350,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
+                            inputFormatters: [UpperCaseTextFormatter()],
                           ),
                         )
                       ],

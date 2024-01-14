@@ -1,4 +1,5 @@
 import 'package:colonia/app/services/setting_service.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -84,4 +85,15 @@ class Network {
 
 List<Json> toListOfJson(List dynamicList) {
   return dynamicList.map((item) => item as Json).toList();
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
 }

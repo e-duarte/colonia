@@ -183,9 +183,10 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                     child: TextFormField(
                       key: UniqueKey(),
                       onChanged: (value) => ufNat = value,
-                      validator: FieldValidator.checkEmptyField,
+                      // validator: FieldValidator.checkEmptyField,
                       maxLength: 2,
                       decoration: inputStyle('UF'),
+                      inputFormatters: [UpperCaseTextFormatter()],
                     ),
                   )
                 ],
@@ -210,7 +211,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       key: UniqueKey(),
                       initialValue: conjuge,
                       onChanged: (value) => conjuge = value,
-                      validator: FieldValidator.checkEmptyField,
+                      // validator: FieldValidator.checkEmptyField,
                       maxLength: 50,
                       decoration: inputStyle('Cônjuge'),
                     ),
@@ -283,6 +284,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       validator: FieldValidator.checkEmptyField,
                       maxLength: 2,
                       decoration: inputStyle('UF'),
+                      inputFormatters: [UpperCaseTextFormatter()],
                     ),
                   )
                 ],
@@ -581,7 +583,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       naturalidade: naturalidade!,
       ufNat: ufNat!,
       estadoCivil: estadoCivil!,
-      conjuge: conjuge!,
+      conjuge: conjuge ?? '',
       cpf: cpf!,
       rg: rg!,
       endereco: endereco,
