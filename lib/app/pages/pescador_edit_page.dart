@@ -5,6 +5,7 @@ import 'package:colonia/app/utils/utils.dart';
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:colonia/app/widgets/dependente_table.dart';
 import 'package:colonia/app/widgets/reply_message.dart';
+import 'package:colonia/app/widgets/report_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -664,21 +665,37 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
             ),
             SizedBox(
               height: 40,
-              child: Stack(
+              child: Row(
                 children: [
-                  const Positioned(
-                    left: 0,
-                    child: CloseButtonWidget(),
+                  const CloseButtonWidget(),
+                  const Spacer(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => ReportWidget(
+                          pescador: _createNewPescador(pescador),
+                          type: 'inss',
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'INSS',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  Positioned(
-                    right: 0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                      ),
-                      onPressed: () => _updatePescador(pescador),
-                      child: const Text('Atualizar',
-                          style: TextStyle(color: Colors.white)),
+                  const Spacer(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                    ),
+                    onPressed: () => _updatePescador(pescador),
+                    child: const Text(
+                      'Atualizar',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
@@ -690,43 +707,47 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
     );
   }
 
+  Pescador _createNewPescador(Pescador pescador) {
+    return pescador.copyWith(
+      nome: nome,
+      apelido: apelido,
+      pai: pai,
+      mae: mae,
+      dataNascimento: dataNascimento.isNotEmpty
+          ? DateFormat('dd/MM/yyyy').parse(dataNascimento)
+          : null,
+      naturalidade: naturalidade,
+      ufNat: ufNat,
+      estadoCivil: estadoCivil,
+      conjuge: conjuge,
+      cpf: cpf,
+      rg: rg,
+      endereco: pescador.endereco.copyWith(
+        municipio: municipio,
+        bairro: bairro,
+        cep: cep,
+        complemento: complemento,
+        fone: fone,
+        logradouro: logradouro,
+        numero: numero,
+        ufAtual: ufAtual,
+      ),
+      nit: nit,
+      cei: cei,
+      pisCef: pisCef,
+      ctps: ctps,
+      serie: serie,
+      rgp: rgp,
+      tituloEleitor: tituloEleitor,
+      secao: secao,
+      zona: zona,
+      dependentes: dependentes.map((e) => Dependente.fromJson(e)).toList(),
+    );
+  }
+
   void _updatePescador(Pescador pescador) {
     if (_formKey.currentState!.validate()) {
-      Pescador updatePescador = pescador.copyWith(
-        nome: nome,
-        apelido: apelido,
-        pai: pai,
-        mae: mae,
-        dataNascimento: dataNascimento.isNotEmpty
-            ? DateFormat('dd/MM/yyyy').parse(dataNascimento)
-            : null,
-        naturalidade: naturalidade,
-        ufNat: ufNat,
-        estadoCivil: estadoCivil,
-        conjuge: conjuge,
-        cpf: cpf,
-        rg: rg,
-        endereco: pescador.endereco.copyWith(
-          municipio: municipio,
-          bairro: bairro,
-          cep: cep,
-          complemento: complemento,
-          fone: fone,
-          logradouro: logradouro,
-          numero: numero,
-          ufAtual: ufAtual,
-        ),
-        nit: nit,
-        cei: cei,
-        pisCef: pisCef,
-        ctps: ctps,
-        serie: serie,
-        rgp: rgp,
-        tituloEleitor: tituloEleitor,
-        secao: secao,
-        zona: zona,
-        dependentes: dependentes.map((e) => Dependente.fromJson(e)).toList(),
-      );
+      Pescador updatePescador = _createNewPescador(pescador);
       setState(() {
         _futurePescador = PescadorService().update(updatePescador);
       });
