@@ -1,3 +1,4 @@
+import 'package:colonia/app/data/pescadores.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +27,7 @@ class PescadorService {
   }
 
   Future<List<Pescador>> getAll() async {
+    return pescadores;
     final uri = await _getEndpoint();
 
     final response = await http.get(Uri.parse(uri));

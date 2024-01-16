@@ -97,6 +97,7 @@ class Pescador {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'idMatricula': idMatricula,
       'nome': nome,
       'apelido': apelido,
       'pai': pai,
@@ -124,6 +125,7 @@ class Pescador {
 
   Pescador copyWith({
     int? id,
+    int? idMatricula,
     String? nome,
     String? apelido,
     String? pai,

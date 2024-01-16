@@ -1,35 +1,37 @@
+import 'package:intl/intl.dart';
+
 class Dependente {
   final int? id;
-  final String nome;
-  final String fone;
+  final String name;
+  final DateTime date;
 
-  Dependente({this.id, required this.nome, required this.fone});
+  Dependente({this.id, required this.name, required this.date});
 
   factory Dependente.fromJson(Map<String, dynamic> data) {
     return Dependente(
       id: data['id'],
-      nome: data['nome'],
-      fone: data['telefone'],
+      name: data['name'],
+      date: DateFormat('dd/MM/yyyy').parse(data['date']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'nome': nome,
-      'telefone': fone,
+      'name': name,
+      'date': DateFormat('dd/MM/yyyy').format(date),
     };
   }
 
   Dependente copyWith({
     int? id,
-    String? nome,
-    String? fone,
+    String? name,
+    DateTime? date,
   }) {
     return Dependente(
       id: id ?? this.id,
-      nome: nome ?? this.nome,
-      fone: fone ?? this.fone,
+      name: name ?? this.name,
+      date: date ?? this.date,
     );
   }
 }

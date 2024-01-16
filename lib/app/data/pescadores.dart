@@ -36,7 +36,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -71,7 +71,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -106,7 +106,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -141,7 +141,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -176,7 +176,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -211,7 +211,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -246,7 +246,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -281,7 +281,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -316,7 +316,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -351,7 +351,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -386,7 +386,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -421,7 +421,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -456,7 +456,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
   Pescador(
@@ -491,7 +491,7 @@ var pescadores = [
     secao: '21',
     zona: '122',
     dependentes: [
-      Dependente(nome: 'Paulo', fone: '93923213213213'),
+      Dependente(name: 'Paulo', date: DateTime.now()),
     ],
   ),
 ];

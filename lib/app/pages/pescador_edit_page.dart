@@ -669,24 +669,24 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                 children: [
                   const CloseButtonWidget(),
                   const Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => ReportWidget(
-                          pescador: _createNewPescador(pescador),
-                          type: 'inss',
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'INSS',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: Colors.green,
+                  //   ),
+                  //   onPressed: () {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (_) => ReportWidget(
+                  //         pescador: _createNewPescador(pescador),
+                  //         type: 'inss',
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: const Text(
+                  //     'INSS',
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
                   const Spacer(),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(

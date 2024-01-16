@@ -600,7 +600,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       zona: zona!,
       dependentes: dependentes
           .map(
-            (e) => Dependente(nome: e['name']!, fone: e['date']!),
+            (e) => Dependente(name: e['name']!, date: e['date']!),
           )
           .toList(),
     );
