@@ -17,6 +17,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
 
   Future<Pescador>? _futurePescador;
 
+  int? idMatricula;
   String? nome;
   String? apelido;
   String? pai;
@@ -359,7 +360,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       key: UniqueKey(),
                       initialValue: complemento,
                       onChanged: (value) => complemento = value,
-                      validator: FieldValidator.checkEmptyField,
+                      // validator: FieldValidator.checkEmptyField
                       maxLength: 50,
                       decoration: inputStyle('Complemento'),
                     ),
@@ -570,11 +571,12 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       logradouro: logradouro!,
       bairro: bairro!,
       numero: numero!,
-      complemento: complemento!,
+      complemento: complemento ?? '',
       fone: fone!,
     );
 
     var pescador = Pescador(
+      idMatricula: idMatricula!,
       nome: nome!,
       apelido: apelido!,
       pai: pai!,
@@ -598,7 +600,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       zona: zona!,
       dependentes: dependentes
           .map(
-            (e) => Dependente(nome: e['nome']!, fone: e['telefone']!),
+            (e) => Dependente(nome: e['name']!, fone: e['date']!),
           )
           .toList(),
     );

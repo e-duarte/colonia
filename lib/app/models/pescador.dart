@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 class Pescador {
   int? id;
+  final int idMatricula;
   final String nome;
   final String apelido;
   final String pai;
@@ -34,6 +35,7 @@ class Pescador {
 
   Pescador({
     this.id,
+    required this.idMatricula,
     required this.nome,
     required this.apelido,
     required this.pai,
@@ -64,10 +66,9 @@ class Pescador {
     final dependentesConverted =
         dependentes.map((e) => Dependente.fromJson(e)).toList();
 
-    // print(dependentesConverted);
-
     return Pescador(
       id: data['id'],
+      idMatricula: data['idMatricula'],
       nome: data['nome'],
       apelido: data['apelido'],
       pai: data['pai'],
@@ -149,6 +150,7 @@ class Pescador {
   }) {
     return Pescador(
       id: id ?? this.id,
+      idMatricula: idMatricula ?? this.idMatricula,
       nome: nome ?? this.nome,
       apelido: apelido ?? this.apelido,
       pai: pai ?? this.pai,

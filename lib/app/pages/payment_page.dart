@@ -41,7 +41,9 @@ class _PaymentPageState extends State<PaymentPage> {
           width: 200,
           child: DateField(
             initValue: paymentDate,
-            handle: (value) {
+            decoration: true,
+            labelText: 'Data de pagamento',
+            onChanged: (value) {
               setState(() {
                 paymentDate = value;
               });

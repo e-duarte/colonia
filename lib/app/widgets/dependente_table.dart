@@ -1,8 +1,9 @@
+import 'package:colonia/app/widgets/date_field.dart';
 import 'package:flutter/material.dart';
 
 class _DependenteTableState extends State<DependenteTable> {
-  String? novoNomeDependente;
-  String? novoFoneDependente;
+  String? newNomeDependente;
+  String? newDateDependente;
 
   List<Map<String, dynamic>> dependentes = [];
 
@@ -34,15 +35,20 @@ class _DependenteTableState extends State<DependenteTable> {
           ),
           child: SingleChildScrollView(
             child: Table(
-              border: TableBorder.all(),
+              border: TableBorder.all(
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
               children: [
                 TableRow(
                   children: [
                     Container(
-                      color: Colors.grey[100],
                       padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green[200],
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(13)),
+                      ),
                       child: const Text(
-                        'Nome',
+                        'Nome Completo',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -50,10 +56,14 @@ class _DependenteTableState extends State<DependenteTable> {
                       ),
                     ),
                     Container(
-                      color: Colors.grey[100],
                       padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green[200],
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(13)),
+                      ),
                       child: const Text(
-                        'Fone',
+                        'Data de Nascimento',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -62,61 +72,89 @@ class _DependenteTableState extends State<DependenteTable> {
                     )
                   ],
                 ),
-                ...List<int>.generate(dependentes.length, (index) => index)
-                    .map((index) {
-                  return TableRow(children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: TextFormField(
-                        initialValue: dependentes[index]['nome'],
-                        onChanged: (value) =>
-                            dependentes[index]['nome'] = value,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: TextFormField(
-                        initialValue: dependentes[index]['telefone'],
-                        onChanged: (value) =>
-                            dependentes[index]['telefone'] = value,
-                      ),
-                    )
-                  ]);
-                }).toList(),
-                TableRow(children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => novoNomeDependente = value,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      onChanged: (value) => novoFoneDependente = value,
-                    ),
-                  )
-                ])
+                ..._buildExistDependentesRow(),
+                _buildNewDependentesRow(),
               ],
             ),
           ),
         ),
-        heightSpacing,
+      ],
+    );
+  }
+
+  List<TableRow> _buildExistDependentesRow() {
+    return List<int>.generate(dependentes.length, (index) => index).map(
+      (index) {
+        return TableRow(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 8),
+              child: TextFormField(
+                initialValue: dependentes[index]['name'],
+                onChanged: (value) => dependentes[index]['name'] = value,
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: DateField(
+                        initValue: dependentes[index]['date'],
+                        decoration: false,
+                        labelText: '',
+                        onChanged: (value) =>
+                            dependentes[index]['date'] = value),
+                  ),
+                ),
+                SizedBox(
+                  child: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _removeDependente(index),
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    ).toList();
+  }
+
+  TableRow _buildNewDependentesRow() {
+    return TableRow(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 8),
+          child: TextFormField(
+            key: UniqueKey(),
+            initialValue: newNomeDependente,
+            onChanged: (value) => newNomeDependente = value,
+          ),
+        ),
         Row(
           children: [
-            const Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(left: 8),
+                child: DateField(
+                  initValue: newDateDependente ?? '',
+                  decoration: false,
+                  labelText: '',
+                  onChanged: (value) {
+                    setState(() => newDateDependente = value);
+                  },
+                ),
               ),
-              onPressed: _updateDependentes,
-              child: const Text('Adicionar',
-                  style: TextStyle(color: Colors.white)),
             ),
+            SizedBox(
+              child: IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: _updateDependentes,
+              ),
+            )
           ],
-        ),
+        )
       ],
     );
   }
@@ -125,12 +163,21 @@ class _DependenteTableState extends State<DependenteTable> {
     setState(() {
       dependentes.add(
         {
-          'nome': novoNomeDependente!,
-          'telefone': novoFoneDependente!,
+          'name': newNomeDependente!,
+          'date': newDateDependente!,
         },
       );
 
+      newNomeDependente = null;
+      newDateDependente = null;
+
       widget.onChanged(dependentes);
+    });
+  }
+
+  void _removeDependente(int index) {
+    setState(() {
+      dependentes.removeAt(index);
     });
   }
 }
