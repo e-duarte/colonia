@@ -20,14 +20,15 @@ class PescadorService {
     );
 
     if (response.statusCode == 201) {
-      return pescador;
+      Pescador savedPescador = Pescador.fromJson(jsonDecode(response.body));
+      return savedPescador;
     } else {
       throw Exception('Failed to create pescador.');
     }
   }
 
   Future<List<Pescador>> getAll() async {
-    return pescadores;
+    // return pescadores;
     final uri = await _getEndpoint();
 
     final response = await http.get(Uri.parse(uri));

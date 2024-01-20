@@ -4,8 +4,8 @@ import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:colonia/app/widgets/dependente_table.dart';
+import 'package:colonia/app/widgets/doc_uploader.dart';
 import 'package:colonia/app/widgets/reply_message.dart';
-import 'package:colonia/app/widgets/report_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -51,6 +51,8 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
   String? novoFoneDependente;
 
   List<Map<String, dynamic>> dependentes = [];
+
+  String? encodedDoc;
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +149,42 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                     widthSpacing,
                     Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.15,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.pai,
-                            onChanged: (value) => pai = value,
-                            maxLength: 50,
+                            initialValue:
+                                FieldFormatter.formatCPF(pescador.cpf),
+                            onChanged: (value) {
+                              cpf = value.replaceAll(RegExp(r'\.|-'), '');
+                            },
+                            validator: FieldValidator.checkCPF,
+                            maxLength: 14,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CpfInputFormatter(),
+                            ],
+                            decoration: inputStyle('CPF'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
+                          ),
+                        ),
+                        heigthSpacing,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          child: TextFormField(
+                            key: UniqueKey(),
+                            initialValue: pescador.rg,
+                            onChanged: (value) => rg = value,
                             validator: FieldValidator.checkEmptyField,
-                            decoration: inputStyle('Pai'),
+                            maxLength: 11,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: inputStyle('RG'),
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
@@ -162,18 +192,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                         heigthSpacing,
                         Expanded(
-                          child: TextFormField(
-                            key: UniqueKey(),
-                            initialValue: pescador.mae,
-                            onChanged: (value) => mae = value,
-                            maxLength: 50,
-                            validator: FieldValidator.checkEmptyField,
-                            decoration: inputStyle('Mãe'),
-                            onEditingComplete: () {
-                              _updatePescador(pescador);
-                            },
+                          child: DocUploader(
+                            labelText: encodedDoc ?? 'Substituir documento',
+                            onChaged: (doc) => encodedDoc = doc,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     widthSpacing,
@@ -249,6 +272,38 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
+                            initialValue: pescador.pai,
+                            onChanged: (value) => pai = value,
+                            maxLength: 50,
+                            validator: FieldValidator.checkEmptyField,
+                            decoration: inputStyle('Pai'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
+                          ),
+                        ),
+                        heigthSpacing,
+                        Expanded(
+                          child: TextFormField(
+                            key: UniqueKey(),
+                            initialValue: pescador.mae,
+                            onChanged: (value) => mae = value,
+                            maxLength: 50,
+                            validator: FieldValidator.checkEmptyField,
+                            decoration: inputStyle('Mãe'),
+                            onEditingComplete: () {
+                              _updatePescador(pescador);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    widthSpacing,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            key: UniqueKey(),
                             initialValue: pescador.estadoCivil,
                             onChanged: (value) => estadoCivil = value,
                             validator: FieldValidator.checkEmptyField,
@@ -277,51 +332,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                       ],
                     ),
                     widthSpacing,
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          child: TextFormField(
-                            key: UniqueKey(),
-                            initialValue:
-                                FieldFormatter.formatCPF(pescador.cpf),
-                            onChanged: (value) {
-                              cpf = value.replaceAll(RegExp(r'\.|-'), '');
-                            },
-                            validator: FieldValidator.checkCPF,
-                            maxLength: 14,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CpfInputFormatter(),
-                            ],
-                            decoration: inputStyle('CPF'),
-                            onEditingComplete: () {
-                              _updatePescador(pescador);
-                            },
-                          ),
-                        ),
-                        heigthSpacing,
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          child: TextFormField(
-                            key: UniqueKey(),
-                            initialValue: pescador.rg,
-                            onChanged: (value) => rg = value,
-                            validator: FieldValidator.checkEmptyField,
-                            maxLength: 11,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: inputStyle('RG'),
-                            onEditingComplete: () {
-                              _updatePescador(pescador);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                     widthSpacing,
                     Row(
                       children: [

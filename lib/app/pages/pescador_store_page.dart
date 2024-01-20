@@ -1,5 +1,9 @@
+import 'package:colonia/app/models/document.dart';
+import 'package:colonia/app/services/document_service.dart';
 import 'package:colonia/app/utils/utils.dart';
-import 'package:colonia/app/widgets/buttons.dart';
+import 'package:colonia/app/widgets/date_field.dart';
+import 'package:colonia/app/widgets/doc_uploader.dart';
+import 'package:colonia/app/widgets/step_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:colonia/app/models/endereco.dart';
 import 'package:colonia/app/models/pescador.dart';
@@ -55,16 +59,15 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
   String? novoNomeDependente;
   String? novoFoneDependente;
 
+  String? dataMatricula;
+
+  String? encodedDoc;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: (_futurePescador == null)
-          ? buildForm()
-          : ReplyMessage(
-              future: _futurePescador!,
-              message: 'Pescador salvo com sucesso',
-            ),
+      body: (_futurePescador == null) ? buildForm() : builderFuture(),
     );
   }
 
@@ -87,7 +90,39 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
               Row(
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.1,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue:
+                          idMatricula != null ? idMatricula.toString() : '',
+                      onChanged: (value) => idMatricula = int.parse(value),
+                      maxLength: 4,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Matrícula'),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.1,
+                    child: DateField(
+                      initValue: dataMatricula ?? '',
+                      decoration: true,
+                      labelText: 'Data Matrícula',
+                      maxLength: 10,
+                      onChanged: (date) {
+                        setState(() {
+                          dataMatricula = date;
+                        });
+                      },
+                      validator: FieldValidator.checkEmptyField,
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
                       key: UniqueKey(),
                       initialValue: nome,
@@ -113,27 +148,47 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
               widthSpacing,
               Row(
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
                     child: TextFormField(
                       key: UniqueKey(),
-                      initialValue: pai,
-                      onChanged: (value) => pai = value,
-                      maxLength: 50,
+                      initialValue:
+                          cpf != null ? FieldFormatter.formatCPF(cpf!) : cpf,
+                      onChanged: (value) {
+                        cpf = value.replaceAll(RegExp(r'\.|-'), '');
+                      },
+                      validator: FieldValidator.checkCPF,
+                      maxLength: 14,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        CpfInputFormatter()
+                      ],
+                      decoration: inputStyle('CPF'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: rg,
+                      onChanged: (value) => rg = value,
                       validator: FieldValidator.checkEmptyField,
-                      decoration: inputStyle('Pai'),
+                      maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: inputStyle('RG'),
                     ),
                   ),
                   heigthSpacing,
                   Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: mae,
-                      onChanged: (value) => mae = value,
-                      maxLength: 50,
-                      validator: FieldValidator.checkEmptyField,
-                      decoration: inputStyle('Mãe'),
+                    child: DocUploader(
+                      onChaged: (doc) => encodedDoc = doc,
                     ),
-                  )
+                  ),
                 ],
               ),
               widthSpacing,
@@ -198,6 +253,32 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                   Expanded(
                     child: TextFormField(
                       key: UniqueKey(),
+                      initialValue: pai,
+                      onChanged: (value) => pai = value,
+                      maxLength: 50,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Pai'),
+                    ),
+                  ),
+                  heigthSpacing,
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      initialValue: mae,
+                      onChanged: (value) => mae = value,
+                      maxLength: 50,
+                      validator: FieldValidator.checkEmptyField,
+                      decoration: inputStyle('Mãe'),
+                    ),
+                  )
+                ],
+              ),
+              widthSpacing,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      key: UniqueKey(),
                       initialValue: estadoCivil,
                       onChanged: (value) => estadoCivil = value,
                       validator: FieldValidator.checkEmptyField,
@@ -215,46 +296,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       // validator: FieldValidator.checkEmptyField,
                       maxLength: 50,
                       decoration: inputStyle('Cônjuge'),
-                    ),
-                  ),
-                ],
-              ),
-              widthSpacing,
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue:
-                          cpf != null ? FieldFormatter.formatCPF(cpf!) : cpf,
-                      onChanged: (value) {
-                        cpf = value.replaceAll(RegExp(r'\.|-'), '');
-                      },
-                      validator: FieldValidator.checkCPF,
-                      maxLength: 14,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                        CpfInputFormatter()
-                      ],
-                      decoration: inputStyle('CPF'),
-                    ),
-                  ),
-                  heigthSpacing,
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: rg,
-                      onChanged: (value) => rg = value,
-                      validator: FieldValidator.checkEmptyField,
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: inputStyle('RG'),
                     ),
                   ),
                 ],
@@ -603,11 +644,39 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
             (e) => Dependente(name: e['name']!, date: e['date']!),
           )
           .toList(),
+      dataMatricula: DateFormat('dd/MM/yyyy').parse(dataMatricula!),
     );
 
     setState(() {
       _futurePescador = PescadorService().save(pescador);
     });
+  }
+
+  Future<Document> saveDocument(Pescador pescador) {
+    var doc = Document(type: 'cpf and rg', encodedDoc: encodedDoc!);
+    var futureDocument = DocumentService().save(pescador, doc);
+
+    return futureDocument;
+  }
+
+  FutureBuilder builderFuture() {
+    return FutureBuilder<Pescador>(
+      future: _futurePescador,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Center(
+            child: ReplyMessage(
+              future: saveDocument(snapshot.data!),
+              message: 'Pescador salvo com sucesso',
+            ),
+          );
+        } else if (snapshot.hasError) {
+          print('${snapshot.error}');
+        }
+        return const Center(
+            child: CircularProgressIndicator(color: Colors.green));
+      },
+    );
   }
 
   InputDecoration inputStyle(String labelText) {
@@ -619,151 +688,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       ),
       border:
           const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-    );
-  }
-}
-
-class StepController extends StatefulWidget {
-  const StepController({
-    required this.tabs,
-    required this.views,
-    required this.validator,
-    required this.saveForm,
-    super.key,
-  });
-
-  final List<String> tabs;
-  final List<Widget> views;
-  final bool Function() validator;
-  final void Function() saveForm;
-
-  @override
-  State<StepController> createState() => _StepControllerState();
-}
-
-class _StepControllerState extends State<StepController> {
-  int activeTab = 0;
-
-  void nextView() {
-    setState(() {
-      if (widget.validator()) {
-        activeTab++;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          StepBar(
-            activeTab: activeTab,
-            tabs: widget.tabs,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          Expanded(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: widget.views[activeTab],
-            ),
-          ),
-          SizedBox(
-            height: 50,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Stack(
-              children: [
-                const Positioned(
-                  left: 0,
-                  child: CloseButtonWidget(),
-                ),
-                if (activeTab == widget.views.length - 1)
-                  Positioned.fill(
-                    // left: 300,
-                    // right: 300,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                        ),
-                        onPressed: widget.saveForm,
-                        child: const Text('salvar',
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Positioned(
-                  right: 0,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    onPressed:
-                        activeTab == widget.views.length - 1 ? null : nextView,
-                    child: const Text('Próximo',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class StepBar extends StatelessWidget {
-  const StepBar({
-    super.key,
-    required this.tabs,
-    required this.activeTab,
-  });
-
-  final List<String> tabs;
-  final int activeTab;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: tabs.asMap().entries.map((e) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: e.key == activeTab ? Colors.green : Colors.black,
-                  width: 1),
-            ),
-          ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: Row(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.08,
-              ),
-              Text(
-                e.value,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: e.key == activeTab
-                        ? FontWeight.bold
-                        : FontWeight.normal),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.08,
-              )
-            ],
-          ),
-        );
-      }).toList(),
     );
   }
 }

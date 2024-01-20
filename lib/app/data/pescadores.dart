@@ -38,6 +38,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -73,6 +74,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -108,6 +110,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -143,6 +146,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -178,6 +182,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -213,6 +218,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -248,6 +254,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -283,6 +290,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -318,6 +326,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -353,6 +362,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -388,6 +398,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -423,6 +434,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -458,6 +470,7 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
   Pescador(
     idMatricula: 1,
@@ -493,5 +506,6 @@ var pescadores = [
     dependentes: [
       Dependente(name: 'Paulo', date: DateTime.now()),
     ],
+    dataMatricula: DateTime.now(),
   ),
 ];

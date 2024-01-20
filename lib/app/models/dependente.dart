@@ -10,8 +10,8 @@ class Dependente {
   factory Dependente.fromJson(Map<String, dynamic> data) {
     return Dependente(
       id: data['id'],
-      name: data['name'],
-      date: DateFormat('dd/MM/yyyy').parse(data['date']),
+      name: data['nome'],
+      date: DateFormat('dd/MM/yyyy').parse(data['nascimento']),
     );
   }
 

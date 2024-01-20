@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateField extends StatelessWidget {
-  const DateField({
+  DateField({
     super.key,
     required this.initValue,
     required this.decoration,
     required this.labelText,
+    this.maxLength,
+    this.validator,
     required this.onChanged,
   });
 
   final String initValue;
   final bool decoration;
   final String labelText;
+  int? maxLength;
+  String? Function(String?)? validator;
   final void Function(String date) onChanged;
 
   @override
@@ -32,6 +36,8 @@ class DateField extends StatelessWidget {
             )
           : null,
       readOnly: true,
+      maxLength: maxLength,
+      validator: validator,
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
