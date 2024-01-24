@@ -15,7 +15,7 @@ class Document {
     return Document(
       id: data['id'],
       type: data['tipo'],
-      encodedDoc: data['encondedDoc'],
+      encodedDoc: data['encodedDoc'],
     );
   }
 
@@ -25,5 +25,17 @@ class Document {
       'tipo': type,
       'encodedDoc': encodedDoc,
     };
+  }
+
+  Document copyWith({
+    int? id,
+    String? type,
+    String? encodedDoc,
+  }) {
+    return Document(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      encodedDoc: encodedDoc ?? this.encodedDoc,
+    );
   }
 }

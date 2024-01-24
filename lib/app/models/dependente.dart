@@ -18,8 +18,8 @@ class Dependente {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'date': DateFormat('dd/MM/yyyy').format(date),
+      'nome': name,
+      'nascimento': DateFormat('dd/MM/yyyy').format(date),
     };
   }
 

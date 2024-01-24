@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class Pescador {
   int? id;
-  final int idMatricula;
+  final String idMatricula;
   final String nome;
   final String apelido;
   final String pai;
@@ -69,7 +69,7 @@ class Pescador {
 
     return Pescador(
       id: data['id'],
-      idMatricula: data['idMatricula'],
+      idMatricula: '${data["idMatricula"]}',
       dataMatricula: DateFormat('dd/MM/yyyy').parse(data['dataMatricula']),
       nome: data['nome'],
       apelido: data['apelido'],
@@ -128,7 +128,7 @@ class Pescador {
 
   Pescador copyWith({
     int? id,
-    int? idMatricula,
+    String? idMatricula,
     String? nome,
     String? apelido,
     String? pai,

@@ -90,8 +90,8 @@ class _DependenteTableState extends State<DependenteTable> {
             Container(
               padding: const EdgeInsets.only(left: 8),
               child: TextFormField(
-                initialValue: dependentes[index]['name'],
-                onChanged: (value) => dependentes[index]['name'] = value,
+                initialValue: dependentes[index]['nome'],
+                onChanged: (value) => dependentes[index]['nome'] = value,
               ),
             ),
             Row(
@@ -100,11 +100,11 @@ class _DependenteTableState extends State<DependenteTable> {
                   child: Container(
                     padding: const EdgeInsets.only(left: 8),
                     child: DateField(
-                        initValue: dependentes[index]['date'],
+                        initValue: dependentes[index]['nascimento'],
                         decoration: false,
                         labelText: '',
                         onChanged: (value) =>
-                            dependentes[index]['date'] = value),
+                            dependentes[index]['nascimento'] = value),
                   ),
                 ),
                 SizedBox(
@@ -163,8 +163,8 @@ class _DependenteTableState extends State<DependenteTable> {
     setState(() {
       dependentes.add(
         {
-          'name': newNomeDependente!,
-          'date': newDateDependente!,
+          'nome': newNomeDependente!,
+          'nascimento': newDateDependente!,
         },
       );
 

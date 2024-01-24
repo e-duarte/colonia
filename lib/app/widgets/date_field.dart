@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+//ignore: must_be_immutable
 class DateField extends StatelessWidget {
   DateField({
     super.key,
@@ -12,7 +13,7 @@ class DateField extends StatelessWidget {
     required this.onChanged,
   });
 
-  final String initValue;
+  final String? initValue;
   final bool decoration;
   final String labelText;
   int? maxLength;

@@ -17,7 +17,7 @@ class _DocUploaderState extends State<DocUploader> {
       decoration: inputStyle(widget.labelText),
       onTap: loadFile,
       readOnly: true,
-      validator: FieldValidator.checkEmptyField,
+      validator: widget.validator,
     );
   }
 
@@ -63,10 +63,12 @@ class DocUploader extends StatefulWidget {
     super.key,
     required this.onChaged,
     this.labelText = 'Carregar CPF e RG',
+    this.validator,
   });
 
   final void Function(String encodedDoc) onChaged;
   final String labelText;
+  final String? Function(String?)? validator;
 
   @override
   State<DocUploader> createState() => _DocUploaderState();

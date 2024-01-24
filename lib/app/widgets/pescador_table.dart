@@ -1,6 +1,7 @@
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/utils/utils.dart';
+import 'package:colonia/app/widgets/doc_widget.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class PescadorTable extends StatelessWidget {
       columns: columns
           .map((String c) => c != 'Ações'
               ? DataColumn2(label: Text(c))
-              : DataColumn2(label: Text(c), fixedWidth: 100))
+              : DataColumn2(label: Text(c), fixedWidth: 150))
           .toList(),
       rows: List<DataRow>.generate(
         pescadores.length,
@@ -46,6 +47,19 @@ class PescadorTable extends StatelessWidget {
             DataCell(
               Row(
                 children: [
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) =>
+                            DocumentWidget(pescador: pescadores[index]),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.contact_page,
+                      color: Colors.grey,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/pescadoreditpage',

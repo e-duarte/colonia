@@ -1,6 +1,7 @@
 import 'package:colonia/app/models/document.dart';
 import 'package:colonia/app/services/document_service.dart';
 import 'package:colonia/app/utils/utils.dart';
+import 'package:colonia/app/widgets/buttons.dart';
 import 'package:colonia/app/widgets/date_field.dart';
 import 'package:colonia/app/widgets/doc_uploader.dart';
 import 'package:colonia/app/widgets/step_bar.dart';
@@ -21,7 +22,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
 
   Future<Pescador>? _futurePescador;
 
-  int? idMatricula;
+  String? idMatricula;
   String? nome;
   String? apelido;
   String? pai;
@@ -95,7 +96,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       key: UniqueKey(),
                       initialValue:
                           idMatricula != null ? idMatricula.toString() : '',
-                      onChanged: (value) => idMatricula = int.parse(value),
+                      onChanged: (value) => idMatricula = value,
                       maxLength: 4,
                       validator: FieldValidator.checkEmptyField,
                       decoration: inputStyle('Matrícula'),
@@ -641,7 +642,10 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       zona: zona!,
       dependentes: dependentes
           .map(
-            (e) => Dependente(name: e['name']!, date: e['date']!),
+            (e) => Dependente(
+              name: e['nome']!,
+              date: DateFormat('dd/MM/yyyy').parse(e['nascimento']!),
+            ),
           )
           .toList(),
       dataMatricula: DateFormat('dd/MM/yyyy').parse(dataMatricula!),
@@ -671,7 +675,16 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
             ),
           );
         } else if (snapshot.hasError) {
-          print('${snapshot.error}');
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('${snapshot.error}'),
+                const SizedBox(height: 10),
+                const CloseButtonWidget(),
+              ],
+            ),
+          );
         }
         return const Center(
             child: CircularProgressIndicator(color: Colors.green));

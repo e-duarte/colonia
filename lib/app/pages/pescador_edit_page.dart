@@ -1,8 +1,11 @@
 import 'package:colonia/app/models/dependente.dart';
+import 'package:colonia/app/models/document.dart';
 import 'package:colonia/app/models/pescador.dart';
+import 'package:colonia/app/services/document_service.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:colonia/app/widgets/buttons.dart';
+import 'package:colonia/app/widgets/date_field.dart';
 import 'package:colonia/app/widgets/dependente_table.dart';
 import 'package:colonia/app/widgets/doc_uploader.dart';
 import 'package:colonia/app/widgets/reply_message.dart';
@@ -15,6 +18,8 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
   final _formKey = GlobalKey<FormState>();
   Future<Pescador>? _futurePescador;
 
+  String? idMatricula;
+  String? dataMatricula;
   String? nome;
   String? apelido;
   String? pai;
@@ -57,14 +62,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: (_futurePescador == null)
-          ? buildForm()
-          : ReplyMessage(
-              future: _futurePescador!,
-              message: 'Pescador atualiazado com sucesso',
-            ),
-    );
+        backgroundColor: Colors.white,
+        body: (_futurePescador == null) ? buildForm() : _buildFuture()
+        // : ReplyMessage(
+        //     future: _futurePescador!,
+        //     message: 'Pescador atualiazado com sucesso',
+        //   ),
+        );
   }
 
   Widget buildForm() {
@@ -113,11 +117,40 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                     ),
                     Row(
                       children: [
-                        const SizedBox(
-                          height: 30,
-                        ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          child: TextFormField(
+                            key: UniqueKey(),
+                            initialValue: pescador.idMatricula.toString(),
+                            onChanged: (value) => idMatricula = value,
+                            maxLength: 4,
+                            validator: FieldValidator.checkEmptyField,
+                            decoration: inputStyle('Matrícula'),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                          ),
+                        ),
+                        heigthSpacing,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          child: DateField(
+                            initValue: DateFormat('dd/MM/yyyy')
+                                .format(pescador.dataMatricula),
+                            decoration: true,
+                            labelText: 'Data Matrícula',
+                            maxLength: 10,
+                            onChanged: (date) {
+                              setState(() {
+                                dataMatricula = date;
+                              });
+                            },
+                            validator: FieldValidator.checkEmptyField,
+                          ),
+                        ),
+                        heigthSpacing,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
                           child: TextFormField(
                             key: UniqueKey(),
                             initialValue: pescador.nome,
@@ -719,6 +752,9 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
 
   Pescador _createNewPescador(Pescador pescador) {
     return pescador.copyWith(
+      idMatricula: idMatricula,
+      dataMatricula: DateFormat('dd/MM/yyyy').parse(dataMatricula ??
+          DateFormat('dd/MM/yyyy').format(pescador.dataMatricula)),
       nome: nome,
       apelido: apelido,
       pai: pai,
@@ -757,33 +793,34 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
 
   void _updatePescador(Pescador pescador) {
     if (_formKey.currentState!.validate()) {
-      Pescador updatePescador = _createNewPescador(pescador);
+      Pescador updatedPescador = _createNewPescador(pescador);
       setState(() {
-        _futurePescador = PescadorService().update(updatePescador);
+        _futurePescador = PescadorService().update(updatedPescador);
       });
     }
   }
 
-  FutureBuilder buildFutureBuilder() {
-    return FutureBuilder<Pescador>(
+  FutureBuilder _buildFuture() {
+    return FutureBuilder(
       future: _futurePescador,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Pescador atualizado com sucesso!',
-                  style: TextStyle(fontSize: 30),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                CloseButtonWidget()
-              ],
-            ),
-          );
+          Pescador pescador = snapshot.data!;
+          return (encodedDoc != null)
+              ? ReplyMessage(
+                  future: DocumentService().update(
+                    Document(
+                      type: 'cpf and rg',
+                      encodedDoc: encodedDoc!,
+                    ),
+                    pescador,
+                  ),
+                  message: 'Pescador Atulizado com sucesso',
+                )
+              : ReplyMessage(
+                  future: _futurePescador!,
+                  message: 'Pescador Atulizado com sucesso',
+                );
         } else if (snapshot.hasError) {
           return Center(
             child: Column(
@@ -796,7 +833,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
             ),
           );
         }
-
         return const Center(
           child: CircularProgressIndicator(color: Colors.green),
         );

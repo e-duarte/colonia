@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 var pescadores = [
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -41,7 +41,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -77,7 +77,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -113,7 +113,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -149,7 +149,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -185,7 +185,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -221,7 +221,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -257,7 +257,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -293,7 +293,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -329,7 +329,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -365,7 +365,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -401,7 +401,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -437,7 +437,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",
@@ -473,7 +473,7 @@ var pescadores = [
     dataMatricula: DateTime.now(),
   ),
   Pescador(
-    idMatricula: 1,
+    idMatricula: '1',
     nome: 'Joca',
     apelido: 'Jão',
     pai: "José",

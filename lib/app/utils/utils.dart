@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:colonia/app/services/setting_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -95,5 +99,48 @@ class UpperCaseTextFormatter extends TextInputFormatter {
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,
     );
+  }
+}
+
+Future<String> pickFile() async {
+  try {
+    final result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      return result.files.first.path!;
+    } else {
+      throw ('File don\'t selected');
+    }
+  } catch (e) {
+    throw ('File don\'t selected');
+  }
+}
+
+Future<String> pickDir() async {
+  try {
+    final result = await FilePicker.platform.getDirectoryPath();
+    if (result != null) {
+      return result;
+    } else {
+      throw ('Directory don\'t selected');
+    }
+  } catch (e) {
+    throw ('Directory don\'t selected');
+  }
+}
+
+class DocDecoderAndCoder {
+  static Future<String> openAndEncodeDoc() async {
+    final path = await pickFile();
+    List<int> bytes = File(path).readAsBytesSync();
+    return base64Encode(bytes);
+  }
+
+  static Future<String> decodeAndSaveDoc(String encoded) async {
+    final dirPath = await pickDir();
+    final filePath =
+        '$dirPath/documento_pescador_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    List<int> doc = base64Decode(encoded);
+    File(filePath).writeAsBytesSync(doc);
+    return filePath;
   }
 }

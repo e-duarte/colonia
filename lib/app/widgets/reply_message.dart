@@ -2,7 +2,11 @@ import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class ReplyMessage extends StatelessWidget {
-  const ReplyMessage({super.key, required this.future, required this.message});
+  const ReplyMessage({
+    super.key,
+    required this.future,
+    required this.message,
+  });
 
   final Future future;
   final String message;
