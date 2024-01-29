@@ -649,6 +649,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
           )
           .toList(),
       dataMatricula: DateFormat('dd/MM/yyyy').parse(dataMatricula!),
+      active: true,
     );
 
     setState(() {

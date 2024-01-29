@@ -70,15 +70,16 @@ class PescadorTable extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      PescadorService().delete(pescadores[index]);
-                    },
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                  )
+                  if (pescadores[index].active)
+                    IconButton(
+                      onPressed: () {
+                        PescadorService().delete(pescadores[index]);
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    )
                 ],
               ),
             ),

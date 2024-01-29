@@ -1,5 +1,4 @@
 import 'package:colonia/app/models/pescador.dart';
-import 'package:colonia/app/pages/payment_page.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/services/setting_service.dart';
 import 'package:colonia/app/widgets/buttons.dart';
@@ -13,10 +12,13 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 class _HomePageState extends State<HomePage> {
   List<Pescador> pescadores = [];
   List<Pescador> filtredPescadores = [];
+  List<Pescador> pescadoresByActive = [];
   bool reload = true;
   Pescador? selectedPescador;
   int? selectPescadorIndex;
   bool isDataLoaded = false;
+
+  bool active = true;
 
   @override
   void initState() {
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     const leftPadding = 50.0;
     const rightPadding = 50.0;
     const bottomPadding = 50.0;
-    const topPadding = 50.0;
+    const topPadding = 30.0;
 
     const columns = [
       'Nome Completo',
@@ -70,42 +72,70 @@ class _HomePageState extends State<HomePage> {
         bottom: bottomPadding,
         top: topPadding,
       ),
-      child: FutureBuilder(
-        future: PescadorService().getAll(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (reload) initVars(snapshot.data!);
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CheckboxListTile(
+            title: const Text(
+              'Exibir pescadores ativos',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            value: active,
+            onChanged: (value) {
+              setState(() {
+                active = value!;
+              });
+            },
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: PescadorService().getAll(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (reload) initVars(snapshot.data!);
 
-            return PescadorTable(
-              columns: columns,
-              pescadores: filtredPescadores,
-              selectedPescador: selectPescadorIndex,
-              handleTable: selectPescador,
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error em carregar pescadores. ${snapshot.error}'),
-            );
-          } else {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: Colors.green,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Carregando Pescadores',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
+                  pescadoresByActive = active
+                      ? filtredPescadores
+                          .where((p) => p.active == true)
+                          .toList()
+                      : filtredPescadores
+                          .where((p) => p.active == false)
+                          .toList();
+
+                  return PescadorTable(
+                    columns: columns,
+                    pescadores: pescadoresByActive,
+                    selectedPescador: selectPescadorIndex,
+                    handleTable: selectPescador,
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child:
+                        Text('Error em carregar pescadores. ${snapshot.error}'),
+                  );
+                } else {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.green,
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Carregando Pescadores',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -292,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const Spacer(),
                       Text(
-                        'Total de ${filtredPescadores.length} Pescadores ~ Develop By Xingu App',
+                        'Total de ${filtredPescadores.where((p) => p.active).length} Pescadores ~ Develop By Xingu App',
                         style: const TextStyle(color: Colors.white54),
                       ),
                     ],
@@ -333,7 +363,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       selectPescadorIndex = (index == selectPescadorIndex) ? null : index;
       selectedPescador =
-          (selectPescadorIndex != null) ? filtredPescadores[index!] : null;
+          (selectPescadorIndex != null) ? pescadoresByActive[index!] : null;
     });
   }
 }
