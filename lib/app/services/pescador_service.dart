@@ -1,4 +1,3 @@
-import 'package:colonia/app/data/pescadores.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:http/http.dart' as http;

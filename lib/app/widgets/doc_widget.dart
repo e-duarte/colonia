@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/document_service.dart';
 import 'package:colonia/app/utils/utils.dart';
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 
 class DocumentWidget extends StatelessWidget {
   const DocumentWidget({

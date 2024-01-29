@@ -200,11 +200,8 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         onPressed: (selectedPescador != null)
                             ? () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      PaymentPage(pescador: selectedPescador!),
-                                );
+                                Navigator.pushNamed(context, '/paymentpage',
+                                    arguments: selectedPescador);
                               }
                             : null,
                         icon: const Icon(Icons.access_time_filled),

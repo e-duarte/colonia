@@ -34,8 +34,10 @@ class ReplyMessage extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('${snapshot.error}'),
+                const SizedBox(height: 10),
                 const CloseButtonWidget(),
               ],
             ),

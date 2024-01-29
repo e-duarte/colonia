@@ -1,7 +1,9 @@
+import 'package:colonia/app/models/payment.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/payment_service.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PaymentTable extends StatelessWidget {
   const PaymentTable(this.pescador, {super.key});
@@ -26,34 +28,38 @@ class PaymentTable extends StatelessWidget {
       'DEZ',
     ];
 
-    return FutureBuilder(
-      future: PaymentService().getAll(pescador),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final dates = snapshot.data!.map((e) => e.paymentDate).toList();
-          return dates.isNotEmpty
-              ? _buildTable(dates, columns)
-              : const Text('Nenhum pagamento');
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: Text('Falha em carregar pagamentos'),
-          );
-        }
+    return Consumer<PaymentNotifier>(
+      builder: (context, paymentNotifier, child) {
+        return FutureBuilder(
+          future: PaymentService().getAll(pescador),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final dates = snapshot.data!;
+              return dates.isNotEmpty
+                  ? _buildTable(dates, columns)
+                  : const Text('Nenhum pagamento');
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Falha em carregar pagamentos'),
+              );
+            }
 
-        return const CircularProgressIndicator(
-          color: Colors.green,
+            return const CircularProgressIndicator(
+              color: Colors.green,
+            );
+          },
         );
       },
     );
   }
 
-  Widget _buildTable(List<DateTime> dates, List<String> columns) {
+  Widget _buildTable(List<Payment> payments, List<String> columns) {
     return DataTable2(
-        headingRowColor:
-            MaterialStateColor.resolveWith((states) => Colors.green),
-        headingTextStyle: const TextStyle(color: Colors.white),
-        columns: columns.map((c) => DataColumn(label: Text(c))).toList(),
-        rows: _buildRow(dates));
+      headingRowColor: MaterialStateColor.resolveWith((states) => Colors.green),
+      headingTextStyle: const TextStyle(color: Colors.white),
+      columns: columns.map((c) => DataColumn(label: Text(c))).toList(),
+      rows: _buildRow(payments),
+    );
   }
 
   List<int> _getYears(List<DateTime> dates) {
@@ -62,18 +68,23 @@ class PaymentTable extends StatelessWidget {
     return years;
   }
 
-  List<DataRow> _buildRow(List<DateTime> dates) {
-    List<int> years = _getYears(dates).toSet().toList();
+  List<DataRow> _buildRow(List<Payment> payments) {
+    final dates = payments.map((p) => p.paymentDate).toList();
+    final years = _getYears(dates).toSet();
 
     return years.map((y) {
       List<String> cells = List.generate(13, (i) => '');
       List<int> months =
           dates.where((date) => date.year == y).map((e) => e.month).toList();
+      final nRecibos = payments
+          .where((p) => p.paymentDate.year == y)
+          .map((p) => p.nRecibo)
+          .toList();
 
       cells[0] = y.toString();
 
-      for (var m in months) {
-        cells[m] = 'X';
+      for (var i = 0; i < months.length; i++) {
+        cells[months[i]] = '${nRecibos[i]}';
       }
 
       return DataRow(cells: cells.map((e) => DataCell(Text(e))).toList());

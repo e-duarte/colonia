@@ -22,30 +22,37 @@ class PaymentService {
     }
   }
 
-  Future<Payment> save(Pescador pescador, Payment payment) async {
-    var payments = await getAll(pescador);
-    var exist =
-        payments.where((p) => p.paymentDate.month == payment.paymentDate.month);
+  Future<BatchPayment> save(
+      Pescador pescador, BatchPayment bacthPayment) async {
+    var savedPayments = await getAll(pescador);
 
-    if (exist.isEmpty) {
+    final exists = [];
+
+    for (var date in bacthPayment.paymentDates) {
+      var filtered = savedPayments.where((p) =>
+          p.paymentDate.year == date.year && p.paymentDate.month == date.month);
+
+      exists.addAll(filtered);
+    }
+
+    if (exists.isEmpty) {
       final uri = await _getEndpoint();
 
       final response = await http.post(
-        Uri.parse(uri),
+        Uri.parse('$uri/${pescador.id}/lote'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(payment.toJson()),
+        body: jsonEncode(bacthPayment.toJson()),
       );
 
       if (response.statusCode == 201) {
-        return payment;
+        return bacthPayment;
       } else {
         throw Exception('Failed to create Payment.');
       }
     } else {
-      print('exist');
-      return payment;
+      throw Exception('Failed to create Payment. Payment was done');
     }
   }
 }
