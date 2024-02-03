@@ -29,8 +29,6 @@ class Pescador {
   final String secao;
   final String zona;
 
-  final List<Dependente> dependentes;
-
   final DateTime dataMatricula;
 
   final bool active;
@@ -60,16 +58,10 @@ class Pescador {
     required this.tituloEleitor,
     required this.secao,
     required this.zona,
-    required this.dependentes,
     required this.active,
   });
 
   factory Pescador.fromJson(Map<String, dynamic> data) {
-    final dependentes =
-        data['dependentes'] != null ? data['dependentes'] as List : [];
-    final dependentesConverted =
-        dependentes.map((e) => Dependente.fromJson(e)).toList();
-
     return Pescador(
       id: data['id'],
       idMatricula: '${data["idMatricula"]}',
@@ -95,7 +87,6 @@ class Pescador {
       tituloEleitor: data['tituloEleitor'],
       secao: data['secaoEleitor'],
       zona: data['zonaEleitor'],
-      dependentes: dependentesConverted,
       active: data['ativo'],
     );
   }
@@ -125,7 +116,6 @@ class Pescador {
       'tituloEleitor': tituloEleitor,
       'secaoEleitor': secao,
       'zonaEleitor': zona,
-      'dependentes': dependentes.map((d) => d.toJson()).toList(),
       'dataMatricula': DateFormat('dd/MM/yyyy').format(dataMatricula),
       'ativo': active,
     };
@@ -183,8 +173,6 @@ class Pescador {
       tituloEleitor: tituloEleitor ?? this.tituloEleitor,
       secao: secao ?? this.secao,
       zona: zona ?? this.zona,
-      dependentes: dependentes ??
-          this.dependentes.map((dependente) => dependente.copyWith()).toList(),
       dataMatricula: dataMatricula ?? this.dataMatricula,
       active: active ?? this.active,
     );
@@ -192,6 +180,6 @@ class Pescador {
 
   @override
   String toString() {
-    return nome;
+    return toJson().toString();
   }
 }

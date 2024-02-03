@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Colonia de Pesca"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.1"
 #define MyAppPublisher "Xingu App"
 #define MyAppURL "https://www.xinguapp.com/"
 #define MyAppExeName "colonia.exe"
@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{54C7BEDA-A5C5-4E3E-B0C3-A0B73CCBC0EB}
+AppId={{F13AEAF0-DB06-41FF-AFA2-719B71C21A1D}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -23,7 +23,8 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\Ewerton Duarte\Documents\Projects\colonia\installers
-OutputBaseFilename=colonia de pesca 1.0
+OutputBaseFilename=colonia
+SetupIconFile=C:\Users\Ewerton Duarte\Pictures\app_icon1.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

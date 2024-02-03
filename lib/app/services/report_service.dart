@@ -13,7 +13,7 @@ class ReportService {
       String dirPath, String type, Pescador pescador) async {
     final uri = await _getEndpoint();
 
-    final response = await http.get(Uri.parse('$uri/$type/${pescador.id}'));
+    final response = await http.get(Uri.parse('$uri/${pescador.id}/$type'));
     if (response.statusCode == 200) {
       var formatedDate =
           '${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}${DateTime.now().millisecondsSinceEpoch}';

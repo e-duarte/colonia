@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'package:colonia/app/data/documents.dart';
 import 'package:colonia/app/models/document.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/utils/utils.dart';
@@ -10,14 +9,14 @@ class DocumentService {
     return '${await Network().getUri()}/documento';
   }
 
-  Future<Document> getAll(Pescador pescador) async {
+  Future<List<Document>> getAll(Pescador pescador) async {
     final uri = await _getEndpoint();
     final response = await http.get(Uri.parse('$uri/${pescador.id}'));
 
     if (response.statusCode == 200) {
       final jsonDocuments = jsonDecode(response.body) as List;
       var documents = jsonDocuments.map((d) => Document.fromJson(d)).toList();
-      return documents.first;
+      return documents;
     } else {
       throw Exception('Failed to load documents');
     }
@@ -45,21 +44,25 @@ class DocumentService {
     final uri = await _getEndpoint();
     final fetchDoc = await getAll(pescador);
 
-    final newDoc =
-        updatedDoc.copyWith(id: fetchDoc.id, encodedDoc: updatedDoc.encodedDoc);
-
-    final response = await http.put(
-      Uri.parse('$uri/${newDoc.id}'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: jsonEncode(newDoc.toJson()),
-    );
-
-    if (response.statusCode == 204) {
-      return newDoc;
+    if (fetchDoc.isEmpty) {
+      return await save(pescador, updatedDoc);
     } else {
-      throw Exception('Failed to update Pescador');
+      final newDoc = updatedDoc.copyWith(
+          id: fetchDoc.first.id, encodedDoc: updatedDoc.encodedDoc);
+
+      final response = await http.put(
+        Uri.parse('$uri/${newDoc.id}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(newDoc.toJson()),
+      );
+
+      if (response.statusCode == 204) {
+        return newDoc;
+      } else {
+        throw Exception('Failed to update Document');
+      }
     }
   }
 }

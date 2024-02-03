@@ -39,7 +39,7 @@ class PaymentService {
       final uri = await _getEndpoint();
 
       final response = await http.post(
-        Uri.parse('$uri/${pescador.id}/lote'),
+        Uri.parse('$uri/${pescador.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

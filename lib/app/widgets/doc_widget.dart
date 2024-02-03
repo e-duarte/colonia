@@ -26,20 +26,25 @@ class DocumentWidget extends StatelessWidget {
               future: DocumentService().getAll(pescador),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  final doc = snapshot.data!;
-                  return FutureBuilder(
-                    future: DocDecoderAndCoder.decodeAndSaveDoc(doc.encodedDoc),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final path = snapshot.data!;
-                        return _buildSucessMessage(path);
-                      } else if (snapshot.hasError) {
-                        final error = snapshot.error.toString();
-                        return _buildErrorMessage(error);
-                      }
-                      return _buildLoading();
-                    },
-                  );
+                  final docs = snapshot.data;
+                  return docs!.isNotEmpty
+                      ? FutureBuilder(
+                          future: DocDecoderAndCoder.decodeAndSaveDoc(
+                              docs.first.encodedDoc),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final path = snapshot.data!;
+                              return _buildSucessMessage(path);
+                            } else if (snapshot.hasError) {
+                              final error = snapshot.error.toString();
+                              return _buildErrorMessage(error);
+                            }
+                            return _buildLoading();
+                          },
+                        )
+                      : _buildErrorMessage(
+                          'Nenhum documento encontrado. Faça o carregamento de um documento válido.',
+                        );
                 } else if (snapshot.hasError) {
                   final error = snapshot.error.toString();
                   return _buildErrorMessage(error);

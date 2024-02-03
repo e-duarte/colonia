@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 class Payment {
   int? id;
-  final int nRecibo;
+  final String nRecibo;
   final DateTime paymentDate;
 
   Payment({
@@ -38,7 +38,7 @@ class Payment {
 class BatchPayment {
   int? id;
 
-  final int nRecibo;
+  final String nRecibo;
 
   final List<DateTime> paymentDates;
 

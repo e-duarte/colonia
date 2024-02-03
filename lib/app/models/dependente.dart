@@ -34,4 +34,9 @@ class Dependente {
       date: date ?? this.date,
     );
   }
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

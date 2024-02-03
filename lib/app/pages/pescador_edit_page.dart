@@ -1,4 +1,3 @@
-import 'package:colonia/app/models/dependente.dart';
 import 'package:colonia/app/models/document.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/document_service.dart';
@@ -55,20 +54,51 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
   String? novoNomeDependente;
   String? novoFoneDependente;
 
-  List<Map<String, dynamic>> dependentes = [];
-
   String? encodedDoc;
+
+  bool isInitVars = true;
+
+  void initVars(Pescador pescador) {
+    idMatricula = pescador.idMatricula;
+    dataMatricula = DateFormat('dd/MM/yyyy').format(pescador.dataMatricula);
+    nome = pescador.nome;
+    apelido = pescador.apelido;
+    pai = pescador.pai;
+    mae = pescador.mae;
+    dataNascimento = DateFormat('dd/MM/yyyy').format(pescador.dataNascimento);
+    naturalidade = pescador.naturalidade;
+    ufNat = pescador.ufNat;
+    estadoCivil = pescador.estadoCivil;
+    conjuge = pescador.conjuge;
+    cpf = pescador.cpf;
+    rg = pescador.rg;
+
+    municipio = pescador.endereco.municipio;
+    ufAtual = pescador.endereco.ufAtual;
+    cep = pescador.endereco.cep;
+    logradouro = pescador.endereco.logradouro;
+    bairro = pescador.endereco.bairro;
+    numero = pescador.endereco.numero;
+    complemento = pescador.endereco.complemento;
+    fone = pescador.endereco.fone;
+    nit = pescador.nit;
+    cei = pescador.cei;
+    pisCef = pescador.pisCef;
+    ctps = pescador.ctps;
+    serie = pescador.serie;
+    rgp = pescador.rgp;
+    tituloEleitor = pescador.tituloEleitor;
+    secao = pescador.secao;
+    zona = pescador.zona;
+
+    isInitVars = false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: (_futurePescador == null) ? buildForm() : _buildFuture()
-        // : ReplyMessage(
-        //     future: _futurePescador!,
-        //     message: 'Pescador atualiazado com sucesso',
-        //   ),
-        );
+        body: (_futurePescador == null) ? buildForm() : _buildFuture());
   }
 
   Widget buildForm() {
@@ -76,13 +106,17 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
         <String, dynamic>{}) as Map;
 
     final Pescador pescador = arguments['pescador'];
-    dependentes = pescador.dependentes.map((e) => e.toJson()).toList();
+
+    if (isInitVars) initVars(pescador);
+
+    // dependentes = pescador.dependentes.map((e) => e.toJson()).toList();
 
     final heigthSpacing = SizedBox(
-      width: MediaQuery.of(context).size.width * 0.05,
-    );
-    final widthSpacing = SizedBox(
       height: MediaQuery.of(context).size.height * 0.03,
+    );
+
+    final widthSpacing = SizedBox(
+      width: MediaQuery.of(context).size.width * 0.03,
     );
 
     return Padding(
@@ -121,7 +155,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                           width: MediaQuery.of(context).size.width * 0.1,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.idMatricula.toString(),
+                            initialValue: idMatricula,
                             onChanged: (value) => idMatricula = value,
                             maxLength: 4,
                             validator: FieldValidator.checkEmptyField,
@@ -131,12 +165,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             ],
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.1,
                           child: DateField(
-                            initValue: DateFormat('dd/MM/yyyy')
-                                .format(pescador.dataMatricula),
+                            initValue: dataMatricula,
                             decoration: true,
                             labelText: 'Data Matrícula',
                             maxLength: 10,
@@ -148,12 +181,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             validator: FieldValidator.checkEmptyField,
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.3,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.nome,
+                            initialValue: nome,
                             onChanged: (value) => nome = value,
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
@@ -163,11 +196,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.apelido,
+                            initialValue: apelido,
                             onChanged: (value) => apelido = value,
                             maxLength: 15,
                             validator: FieldValidator.checkEmptyField,
@@ -179,15 +212,14 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         )
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.15,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue:
-                                FieldFormatter.formatCPF(pescador.cpf),
+                            initialValue: FieldFormatter.formatCPF(cpf!),
                             onChanged: (value) {
                               cpf = value.replaceAll(RegExp(r'\.|-'), '');
                             },
@@ -204,12 +236,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.15,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.rg,
+                            initialValue: rg,
                             onChanged: (value) => rg = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 11,
@@ -223,7 +255,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: DocUploader(
                             labelText: encodedDoc ?? 'Substituir documento',
@@ -232,14 +264,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: DateFormat('dd/MM/yyyy')
-                                .format(pescador.dataNascimento),
+                            initialValue: dataNascimento,
                             onChanged: (value) => dataNascimento = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 10,
@@ -267,12 +298,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.naturalidade,
+                            initialValue: naturalidade,
                             onChanged: (value) => naturalidade = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 20,
@@ -282,11 +313,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.ufNat,
+                            initialValue: ufNat,
                             onChanged: (value) => ufNat = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 2,
@@ -299,13 +330,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         )
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.pai,
+                            initialValue: pai,
                             onChanged: (value) => pai = value,
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
@@ -315,11 +346,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.mae,
+                            initialValue: mae,
                             onChanged: (value) => mae = value,
                             maxLength: 50,
                             validator: FieldValidator.checkEmptyField,
@@ -331,13 +362,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         )
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.estadoCivil,
+                            initialValue: estadoCivil,
                             onChanged: (value) => estadoCivil = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 15,
@@ -347,14 +378,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.conjuge,
+                            initialValue: conjuge,
                             onChanged: (value) => conjuge = value,
-                            // validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Cônjuge'),
                             onEditingComplete: () {
@@ -364,15 +394,14 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.endereco.municipio,
+                            initialValue: municipio,
                             onChanged: (value) => municipio = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 30,
@@ -382,11 +411,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.endereco.ufAtual,
+                            initialValue: ufAtual,
                             onChanged: (value) => ufAtual = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 2,
@@ -399,14 +428,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         )
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue:
-                                FieldFormatter.formatCEP(pescador.endereco.cep),
+                            initialValue: FieldFormatter.formatCEP(cep!),
                             onChanged: (value) {
                               cep = value.replaceAll(RegExp(r'\.|-'), '');
                             },
@@ -423,12 +451,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             ],
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.55,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.endereco.logradouro,
+                            initialValue: logradouro,
                             onChanged: (value) => logradouro = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
@@ -440,7 +468,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         )
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
@@ -448,7 +476,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             key: UniqueKey(),
                             onChanged: (value) => bairro = value,
                             validator: FieldValidator.checkEmptyField,
-                            initialValue: pescador.endereco.bairro,
+                            initialValue: bairro,
                             maxLength: 20,
                             decoration: inputStyle('Bairro'),
                             onEditingComplete: () {
@@ -456,14 +484,14 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.2,
                           child: TextFormField(
                             key: UniqueKey(),
                             onChanged: (value) => numero = value,
                             validator: FieldValidator.checkEmptyField,
-                            initialValue: pescador.endereco.numero,
+                            initialValue: numero,
                             maxLength: 5,
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
@@ -475,11 +503,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.endereco.complemento,
+                            initialValue: complemento,
                             onChanged: (value) => complemento = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
@@ -491,15 +519,14 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: FieldFormatter.formatPhone(
-                                pescador.endereco.fone),
+                            initialValue: FieldFormatter.formatPhone(fone!),
                             onChanged: (value) {
                               fone = value.replaceAll(RegExp(r'\(|\)| |-'), '');
                             },
@@ -518,13 +545,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.nit,
+                            initialValue: nit,
                             onChanged: (value) => nit = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 11,
@@ -538,11 +565,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.cei,
+                            initialValue: cei,
                             onChanged: (value) => cei = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 14,
@@ -556,11 +583,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.pisCef,
+                            initialValue: pisCef,
                             onChanged: (value) => pisCef = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 11,
@@ -576,13 +603,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.ctps,
+                            initialValue: ctps,
                             onChanged: (value) => ctps = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 11,
@@ -596,36 +623,28 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.serie,
+                            initialValue: serie,
                             onChanged: (value) => serie = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 20,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
                             decoration: inputStyle('Série'),
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.rgp,
+                            initialValue: rgp,
                             onChanged: (value) => rgp = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 20,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
                             decoration: inputStyle('RGP'),
                             onEditingComplete: () {
                               _updatePescador(pescador);
@@ -634,14 +653,14 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
+                    heigthSpacing,
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
                             initialValue: FieldFormatter.formatTitulo(
-                              pescador.tituloEleitor,
+                              tituloEleitor!,
                             ),
                             onChanged: (value) {
                               tituloEleitor = value.replaceAll(' ', '');
@@ -659,11 +678,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.secao,
+                            initialValue: secao,
                             onChanged: (value) => secao = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 4,
@@ -677,11 +696,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             },
                           ),
                         ),
-                        heigthSpacing,
+                        widthSpacing,
                         Expanded(
                           child: TextFormField(
                             key: UniqueKey(),
-                            initialValue: pescador.zona,
+                            initialValue: zona,
                             onChanged: (value) => zona = value,
                             validator: FieldValidator.checkEmptyField,
                             maxLength: 3,
@@ -697,11 +716,8 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                         ),
                       ],
                     ),
-                    widthSpacing,
-                    DependenteTable(
-                      initDependentes: dependentes,
-                      onChanged: (value) => dependentes = value,
-                    ),
+                    heigthSpacing,
+                    DependenteTable(pescador: pescador),
                   ],
                 ),
               ),
@@ -711,25 +727,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
               child: Row(
                 children: [
                   const CloseButtonWidget(),
-                  const Spacer(),
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: Colors.green,
-                  //   ),
-                  //   onPressed: () {
-                  //     showDialog(
-                  //       context: context,
-                  //       builder: (_) => ReportWidget(
-                  //         pescador: _createNewPescador(pescador),
-                  //         type: 'inss',
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: const Text(
-                  //     'INSS',
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  // ),
                   const Spacer(),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -787,13 +784,13 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
       tituloEleitor: tituloEleitor,
       secao: secao,
       zona: zona,
-      dependentes: dependentes.map((e) => Dependente.fromJson(e)).toList(),
     );
   }
 
   void _updatePescador(Pescador pescador) {
     if (_formKey.currentState!.validate()) {
       Pescador updatedPescador = _createNewPescador(pescador);
+
       setState(() {
         _futurePescador = PescadorService().update(updatedPescador);
       });

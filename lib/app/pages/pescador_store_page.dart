@@ -8,7 +8,6 @@ import 'package:colonia/app/widgets/step_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:colonia/app/models/endereco.dart';
 import 'package:colonia/app/models/pescador.dart';
-import 'package:colonia/app/models/dependente.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/widgets/dependente_table.dart';
 import 'package:colonia/app/widgets/reply_message.dart';
@@ -511,10 +510,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       onChanged: (value) => serie = value,
                       validator: FieldValidator.checkEmptyField,
                       maxLength: 20,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
                       decoration: inputStyle('Série'),
                     ),
                   ),
@@ -526,10 +521,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       onChanged: (value) => rgp = value,
                       validator: FieldValidator.checkEmptyField,
                       maxLength: 20,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
                       decoration: inputStyle('RGP'),
                     ),
                   ),
@@ -591,10 +582,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                 ],
               ),
               widthSpacing,
-              DependenteTable(
-                initDependentes: dependentes,
-                onChanged: (value) => dependentes = value,
-              ),
+              // DependenteTable(pescador: pes,),
             ],
           ),
         ],
@@ -640,14 +628,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       tituloEleitor: tituloEleitor!,
       secao: secao!,
       zona: zona!,
-      dependentes: dependentes
-          .map(
-            (e) => Dependente(
-              name: e['nome']!,
-              date: DateFormat('dd/MM/yyyy').parse(e['nascimento']!),
-            ),
-          )
-          .toList(),
       dataMatricula: DateFormat('dd/MM/yyyy').parse(dataMatricula!),
       active: true,
     );
@@ -658,8 +638,8 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
   }
 
   Future<Document> saveDocument(Pescador pescador) {
-    var doc = Document(type: 'cpf and rg', encodedDoc: encodedDoc!);
-    var futureDocument = DocumentService().save(pescador, doc);
+    final doc = Document(type: 'cpf and rg', encodedDoc: encodedDoc!);
+    final futureDocument = DocumentService().save(pescador, doc);
 
     return futureDocument;
   }
@@ -669,12 +649,18 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
       future: _futurePescador,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Center(
-            child: ReplyMessage(
-              future: saveDocument(snapshot.data!),
-              message: 'Pescador salvo com sucesso',
-            ),
-          );
+          const msg = 'Pescador salvo com sucesso';
+          return encodedDoc != null
+              ? Center(
+                  child: ReplyMessage(
+                    future: saveDocument(snapshot.data!),
+                    message: msg,
+                  ),
+                )
+              : ReplyMessage(
+                  future: _futurePescador!,
+                  message: msg,
+                );
         } else if (snapshot.hasError) {
           return Center(
             child: Column(
