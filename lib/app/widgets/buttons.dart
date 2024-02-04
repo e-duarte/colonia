@@ -7,7 +7,9 @@ class CloseButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: () {
+        Navigator.pop(context);
+      },
       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
       child: const Text(
         'Fechar',

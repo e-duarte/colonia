@@ -10,14 +10,19 @@ import 'package:colonia/app/models/endereco.dart';
 import 'package:colonia/app/models/pescador.dart';
 import 'package:colonia/app/services/pescador_service.dart';
 import 'package:colonia/app/widgets/dependente_table.dart';
-import 'package:colonia/app/widgets/reply_message.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class _PecadorStorePageState extends State<PecadorStorePage> {
+class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
   final _formKey = GlobalKey<FormState>();
-  final tabs = ['Básico', 'Endereço', 'Previdência', 'Outros'];
+  final tabs = [
+    'Básico',
+    'Endereço',
+    'Previdência e Título de Eleitor',
+    'Dependentes'
+  ];
+  int activeTab = 0;
 
   Future<Pescador>? _futurePescador;
 
@@ -54,7 +59,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
   String? secao;
   String? zona;
 
-  List<Map<String, dynamic>> dependentes = [];
+  // List<Map<String, dynamic>> dependentes = [];
 
   String? novoNomeDependente;
   String? novoFoneDependente;
@@ -62,6 +67,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
   String? dataMatricula;
 
   String? encodedDoc;
+  Pescador? pescador;
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +88,16 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
     return Form(
       key: _formKey,
       child: StepController(
-        saveForm: savePescador,
         tabs: tabs,
+        activeTab: activeTab,
+        viewHandles: [
+          _updateIndex,
+          _updateIndex,
+          _savePescador,
+          () {
+            Navigator.popAndPushNamed(context, '/homepage');
+          },
+        ],
         views: [
           Column(
             children: [
@@ -526,10 +540,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                   ),
                 ],
               ),
-            ],
-          ),
-          Column(
-            children: [
+              widthSpacing,
               Row(
                 children: [
                   Expanded(
@@ -539,7 +550,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                       onChanged: (value) {
                         tituloEleitor = value.replaceAll(' ', '');
                       },
-                      validator: FieldValidator.checkTelefone,
+                      validator: FieldValidator.checkTitulo,
                       maxLength: 14,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
@@ -581,10 +592,19 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
                   ),
                 ],
               ),
-              widthSpacing,
-              // DependenteTable(pescador: pes,),
             ],
           ),
+          SingleChildScrollView(
+            child: Column(
+              children: pescador != null
+                  ? [
+                      Column(
+                        children: [DependenteTable(pescador: pescador!)],
+                      )
+                    ]
+                  : [],
+            ),
+          )
         ],
         validator: () {
           return _formKey.currentState!.validate();
@@ -593,7 +613,13 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
     );
   }
 
-  void savePescador() {
+  void _updateIndex() {
+    setState(() {
+      activeTab++;
+    });
+  }
+
+  void _savePescador() {
     var endereco = Endereco(
       municipio: municipio!,
       ufAtual: ufAtual!,
@@ -637,57 +663,81 @@ class _PecadorStorePageState extends State<PecadorStorePage> {
     });
   }
 
-  Future<Document> saveDocument(Pescador pescador) {
+  Future<Document> _saveDocument(Pescador pescador) async {
     final doc = Document(type: 'cpf and rg', encodedDoc: encodedDoc!);
-    final futureDocument = DocumentService().save(pescador, doc);
+    final futureDocument = await DocumentService().save(pescador, doc);
 
     return futureDocument;
   }
 
   FutureBuilder builderFuture() {
-    return FutureBuilder<Pescador>(
+    return FutureBuilder(
       future: _futurePescador,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          const msg = 'Pescador salvo com sucesso';
+          pescador = snapshot.data!;
           return encodedDoc != null
-              ? Center(
-                  child: ReplyMessage(
-                    future: saveDocument(snapshot.data!),
-                    message: msg,
-                  ),
+              ? FutureBuilder(
+                  future: _saveDocument(snapshot.data!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _buildPescadorResponse();
+                    } else if (snapshot.hasError) {
+                      return _buildErrorMessage(snapshot.error.toString());
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.green),
+                    );
+                  },
                 )
-              : ReplyMessage(
-                  future: _futurePescador!,
-                  message: msg,
-                );
+              : _buildPescadorResponse();
         } else if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('${snapshot.error}'),
-                const SizedBox(height: 10),
-                const CloseButtonWidget(),
-              ],
-            ),
-          );
+          return _buildErrorMessage(snapshot.error.toString());
         }
         return const Center(
-            child: CircularProgressIndicator(color: Colors.green));
+          child: CircularProgressIndicator(color: Colors.green),
+        );
       },
     );
   }
 
-  InputDecoration inputStyle(String labelText) {
-    return InputDecoration(
-      labelText: labelText,
-      labelStyle: const TextStyle(color: Colors.green),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.green),
+  Widget _buildPescadorResponse() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Pescador Salvo com Sucesso',
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _futurePescador = null;
+                activeTab++;
+              });
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text(
+              'Salvar Dependentes',
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
       ),
-      border:
-          const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+    );
+  }
+
+  Widget _buildErrorMessage(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(error),
+          const SizedBox(height: 10),
+          const CloseButtonWidget(),
+        ],
+      ),
     );
   }
 }

@@ -10,8 +10,6 @@ class DependenteService {
   }
 
   Future<List<Dependente>> getAllByPescador(Pescador pescador) async {
-    if (pescador.id == null) return [];
-
     final uri = await _getEndpoint();
     final response = await http.get(Uri.parse('$uri/${pescador.id}'));
 
@@ -37,7 +35,8 @@ class DependenteService {
     );
 
     if (response.statusCode == 201) {
-      return dependente;
+      final savedDependente = jsonDecode(response.body) as Json;
+      return Dependente.fromJson(savedDependente);
     } else {
       throw Exception('Failed to create Dependente.');
     }

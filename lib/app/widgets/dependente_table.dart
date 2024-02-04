@@ -34,7 +34,7 @@ class _DependenteTableState extends State<DependenteTable> {
 
   Widget _initTable() {
     const heightSpacing = SizedBox(height: 20);
-    final maxTableHeight = MediaQuery.of(context).size.height * 0.4;
+    // final maxTableHeight = MediaQuery.of(context).size.height * 0.4;
     final minTableHeigth = MediaQuery.of(context).size.height * 0.1;
 
     return Column(
@@ -49,7 +49,7 @@ class _DependenteTableState extends State<DependenteTable> {
         heightSpacing,
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: maxTableHeight,
+            // maxHeight: maxTableHeight,
             minHeight: minTableHeigth,
           ),
           child: _buildTableRows(),
@@ -208,17 +208,18 @@ class _DependenteTableState extends State<DependenteTable> {
     });
   }
 
-  void _saveDependente() {
+  Future<void> _saveDependente() async {
+    final newDependente = Dependente.fromJson({
+      'nome': newNomeDependente,
+      'nascimento': newDateDependente,
+    });
+
+    final savedDependente =
+        await DependenteService().save(widget.pescador, newDependente);
+
     if (newNomeDependente != null && newDateDependente != null) {
       setState(() {
-        final dependente = Dependente.fromJson({
-          'nome': newNomeDependente,
-          'nascimento': newDateDependente,
-        });
-
-        dependentes.add(dependente.toJson());
-        DependenteService().save(widget.pescador, dependente);
-
+        dependentes.add(savedDependente.toJson());
         newNomeDependente = null;
         newDateDependente = null;
       });

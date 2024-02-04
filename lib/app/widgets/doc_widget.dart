@@ -94,7 +94,7 @@ class DocumentWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Erro em baixar documento. $error',
+          'Erro ao baixar documento. $error',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 10),

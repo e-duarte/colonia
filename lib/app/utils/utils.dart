@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:colonia/app/services/setting_service.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -142,5 +143,19 @@ class DocDecoderAndCoder {
     List<int> doc = base64Decode(encoded);
     File(filePath).writeAsBytesSync(doc);
     return filePath;
+  }
+}
+
+mixin FieldStyle {
+  InputDecoration inputStyle(String labelText) {
+    return InputDecoration(
+      labelText: labelText,
+      labelStyle: const TextStyle(color: Colors.green),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.green),
+      ),
+      border:
+          const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+    );
   }
 }

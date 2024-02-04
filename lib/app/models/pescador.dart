@@ -29,6 +29,8 @@ class Pescador {
   final String secao;
   final String zona;
 
+  final List<Dependente>? dependentes;
+
   final DateTime dataMatricula;
 
   final bool active;
@@ -59,9 +61,14 @@ class Pescador {
     required this.secao,
     required this.zona,
     required this.active,
+    this.dependentes,
   });
 
   factory Pescador.fromJson(Map<String, dynamic> data) {
+    final dependentes = data['dependentes'] as List;
+    final dependentesConverted =
+        dependentes.map((e) => Dependente.fromJson(e)).toList();
+
     return Pescador(
       id: data['id'],
       idMatricula: '${data["idMatricula"]}',
@@ -88,6 +95,7 @@ class Pescador {
       secao: data['secaoEleitor'],
       zona: data['zonaEleitor'],
       active: data['ativo'],
+      dependentes: dependentesConverted,
     );
   }
 
@@ -118,6 +126,9 @@ class Pescador {
       'zonaEleitor': zona,
       'dataMatricula': DateFormat('dd/MM/yyyy').format(dataMatricula),
       'ativo': active,
+      'dependentes': dependentes != null
+          ? dependentes!.map((d) => d.toJson()).toList()
+          : [],
     };
   }
 
@@ -175,6 +186,12 @@ class Pescador {
       zona: zona ?? this.zona,
       dataMatricula: dataMatricula ?? this.dataMatricula,
       active: active ?? this.active,
+      dependentes: dependentes != null
+          ? this
+              .dependentes!
+              .map((dependente) => dependente.copyWith())
+              .toList()
+          : this.dependentes,
     );
   }
 

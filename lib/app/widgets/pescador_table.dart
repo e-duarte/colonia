@@ -63,7 +63,9 @@ class PescadorTable extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/pescadoreditpage',
-                          arguments: {'pescador': pescadores[index]});
+                          arguments: {
+                            'pescador': pescadores[index],
+                          });
                     },
                     icon: const Icon(
                       Icons.edit,

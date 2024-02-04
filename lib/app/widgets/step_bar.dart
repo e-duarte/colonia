@@ -1,33 +1,26 @@
 import 'package:colonia/app/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
-class StepController extends StatefulWidget {
+class StepController extends StatelessWidget {
   const StepController({
     required this.tabs,
+    required this.activeTab,
     required this.views,
+    required this.viewHandles,
     required this.validator,
-    required this.saveForm,
     super.key,
   });
 
   final List<String> tabs;
+  final int activeTab;
   final List<Widget> views;
+  final List<void Function()> viewHandles;
   final bool Function() validator;
-  final void Function() saveForm;
-
-  @override
-  State<StepController> createState() => _StepControllerState();
-}
-
-class _StepControllerState extends State<StepController> {
-  int activeTab = 0;
 
   void nextView() {
-    setState(() {
-      if (widget.validator()) {
-        activeTab++;
-      }
-    });
+    if (validator()) {
+      viewHandles[activeTab]();
+    }
   }
 
   @override
@@ -37,16 +30,19 @@ class _StepControllerState extends State<StepController> {
         children: [
           StepBar(
             activeTab: activeTab,
-            tabs: widget.tabs,
+            tabs: tabs,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.08,
           ),
           Expanded(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: widget.views[activeTab],
+              child: views[activeTab],
             ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
           ),
           SizedBox(
             height: 50,
@@ -57,18 +53,18 @@ class _StepControllerState extends State<StepController> {
                   left: 0,
                   child: CloseButtonWidget(),
                 ),
-                if (activeTab == widget.views.length - 1)
+                if (activeTab == views.length - 1)
                   Positioned.fill(
-                    // left: 300,
-                    // right: 300,
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                         ),
-                        onPressed: widget.saveForm,
-                        child: const Text('salvar',
+                        onPressed: () {
+                          viewHandles.last();
+                        },
+                        child: const Text('Concluir Cadastro',
                             style: TextStyle(color: Colors.white)),
                       ),
                     ),
@@ -82,8 +78,7 @@ class _StepControllerState extends State<StepController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    onPressed:
-                        activeTab == widget.views.length - 1 ? null : nextView,
+                    onPressed: activeTab == views.length - 1 ? null : nextView,
                     child: const Text('Próximo',
                         style: TextStyle(color: Colors.white)),
                   ),
