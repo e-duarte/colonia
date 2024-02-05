@@ -26,6 +26,9 @@ class PescadorTable extends StatelessWidget {
     const minWidth = 600.0;
     const isVerticalScrollBarVisible = true;
 
+    pescadores.sort(
+        (p1, p2) => p1.nome.toLowerCase().compareTo(p2.nome.toLowerCase()));
+
     return DataTable2(
       columnSpacing: columnSpacing,
       horizontalMargin: horizontalMargin,
@@ -72,16 +75,26 @@ class PescadorTable extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  if (pescadores[index].active)
-                    IconButton(
-                      onPressed: () {
-                        PescadorService().delete(pescadores[index]);
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    )
+                  pescadores[index].active
+                      ? IconButton(
+                          onPressed: () {
+                            PescadorService().delete(pescadores[index]);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            PescadorService().update(
+                                pescadores[index].copyWith(active: true));
+                          },
+                          icon: const Icon(
+                            Icons.reply_outlined,
+                            color: Colors.green,
+                          ),
+                        )
                 ],
               ),
             ),

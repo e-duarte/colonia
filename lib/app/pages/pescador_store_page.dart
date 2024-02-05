@@ -110,7 +110,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
                       initialValue:
                           idMatricula != null ? idMatricula.toString() : '',
                       onChanged: (value) => idMatricula = value,
-                      maxLength: 4,
+                      maxLength: 5,
                       validator: FieldValidator.checkEmptyField,
                       decoration: inputStyle('Matrícula'),
                       inputFormatters: [
@@ -153,7 +153,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
                       initialValue: apelido,
                       onChanged: (value) => apelido = value,
                       maxLength: 15,
-                      validator: FieldValidator.checkEmptyField,
                       decoration: inputStyle('Apelido'),
                     ),
                   )
@@ -209,31 +208,17 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
               Row(
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      key: UniqueKey(),
-                      initialValue: dataNascimento,
-                      onChanged: (value) => dataNascimento = value,
-                      validator: FieldValidator.checkEmptyField,
+                    child: DateField(
+                      initValue: dataNascimento,
+                      decoration: true,
+                      labelText: 'Data de Nascimento',
                       maxLength: 10,
-                      decoration: inputStyle('Data de Nascimento'),
-                      readOnly: true,
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1980),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (pickedDate != null) {
-                          String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(pickedDate);
-
-                          setState(() {
-                            dataNascimento = formattedDate;
-                          });
-                        }
+                      onChanged: (date) {
+                        setState(() {
+                          dataNascimento = date;
+                        });
                       },
+                      validator: FieldValidator.checkEmptyField,
                     ),
                   ),
                   heigthSpacing,
@@ -253,10 +238,15 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
                     child: TextFormField(
                       key: UniqueKey(),
                       onChanged: (value) => ufNat = value,
-                      // validator: FieldValidator.checkEmptyField,
+                      validator: FieldValidator.checkEmptyField,
                       maxLength: 2,
                       decoration: inputStyle('UF'),
-                      inputFormatters: [UpperCaseTextFormatter()],
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        FilteringTextInputFormatter.deny(
+                          RegExp(r"[0-9\[\]\ \{\}\´\.\,\/]"),
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -340,7 +330,12 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
                       validator: FieldValidator.checkEmptyField,
                       maxLength: 2,
                       decoration: inputStyle('UF'),
-                      inputFormatters: [UpperCaseTextFormatter()],
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        FilteringTextInputFormatter.deny(
+                          RegExp(r"[0-9\[\]\ \{\}\´\.\,\/]"),
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -415,7 +410,6 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
                       key: UniqueKey(),
                       initialValue: complemento,
                       onChanged: (value) => complemento = value,
-                      // validator: FieldValidator.checkEmptyField
                       maxLength: 50,
                       decoration: inputStyle('Complemento'),
                     ),
@@ -634,7 +628,7 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
     var pescador = Pescador(
       idMatricula: idMatricula!,
       nome: nome!,
-      apelido: apelido!,
+      apelido: apelido ?? '',
       pai: pai!,
       mae: mae!,
       dataNascimento: DateFormat('dd/MM/yyyy').parse(dataNascimento),
@@ -710,19 +704,26 @@ class _PecadorStorePageState extends State<PecadorStorePage> with FieldStyle {
             'Pescador Salvo com Sucesso',
           ),
           const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _futurePescador = null;
-                activeTab++;
-              });
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-            child: const Text(
-              'Salvar Dependentes',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CloseButtonWidget(),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _futurePescador = null;
+                    activeTab++;
+                  });
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                child: const Text(
+                  'Salvar Dependentes',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );

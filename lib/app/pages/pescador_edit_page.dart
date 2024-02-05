@@ -157,7 +157,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             key: UniqueKey(),
                             initialValue: idMatricula,
                             onChanged: (value) => idMatricula = value,
-                            maxLength: 4,
+                            maxLength: 5,
                             validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Matrícula'),
                             inputFormatters: [
@@ -203,7 +203,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             initialValue: apelido,
                             onChanged: (value) => apelido = value,
                             maxLength: 15,
-                            validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Apelido'),
                             onEditingComplete: () {
                               _updatePescador(pescador);
@@ -268,34 +267,17 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            key: UniqueKey(),
-                            initialValue: dataNascimento,
-                            onChanged: (value) => dataNascimento = value,
-                            validator: FieldValidator.checkEmptyField,
+                          child: DateField(
+                            initValue: dataNascimento,
+                            decoration: true,
+                            labelText: 'Data de Nascimento',
                             maxLength: 10,
-                            decoration: inputStyle('Data de Nascimento'),
-                            onEditingComplete: () {
-                              _updatePescador(pescador);
+                            onChanged: (date) {
+                              setState(() {
+                                dataNascimento = date;
+                              });
                             },
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1980),
-                                lastDate: DateTime(2101),
-                              );
-
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('dd/MM/yyyy').format(pickedDate);
-
-                                setState(() {
-                                  dataNascimento = formattedDate;
-                                });
-                              }
-                            },
+                            validator: FieldValidator.checkEmptyField,
                           ),
                         ),
                         widthSpacing,
@@ -325,7 +307,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
-                            inputFormatters: [UpperCaseTextFormatter()],
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                              FilteringTextInputFormatter.deny(
+                                RegExp(r"[0-9\[\]\ \{\}\´\.\,\/]"),
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -423,7 +410,12 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             onEditingComplete: () {
                               _updatePescador(pescador);
                             },
-                            inputFormatters: [UpperCaseTextFormatter()],
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                              FilteringTextInputFormatter.deny(
+                                RegExp(r"[0-9\[\]\ \{\}\´\.\,\/]"),
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -509,7 +501,6 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             key: UniqueKey(),
                             initialValue: complemento,
                             onChanged: (value) => complemento = value,
-                            validator: FieldValidator.checkEmptyField,
                             maxLength: 50,
                             decoration: inputStyle('Complemento'),
                             onEditingComplete: () {
@@ -812,11 +803,11 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                     ),
                     pescador,
                   ),
-                  message: 'Pescador Atulizado com sucesso',
+                  message: 'Pescador Atualizado com sucesso',
                 )
               : ReplyMessage(
                   future: _futurePescador!,
-                  message: 'Pescador Atulizado com sucesso',
+                  message: 'Pescador Atualizado com sucesso',
                 );
         } else if (snapshot.hasError) {
           return Center(

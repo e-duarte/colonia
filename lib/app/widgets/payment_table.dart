@@ -84,7 +84,7 @@ class PaymentTable extends StatelessWidget {
       cells[0] = y.toString();
 
       for (var i = 0; i < months.length; i++) {
-        cells[months[i]] = '${nRecibos[i]}';
+        cells[months[i]] = nRecibos[i];
       }
 
       return DataRow(cells: cells.map((e) => DataCell(Text(e))).toList());

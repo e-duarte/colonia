@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const Spacer(),
                       Text(
-                        'Total de ${filtredPescadores.where((p) => p.active).length} Pescadores ativo ~ Develop By Xingu App',
+                        'Ativos(${filtredPescadores.where((p) => p.active).length})/Desativados(${filtredPescadores.where((p) => !p.active).length}) ~ Develop By Xingu App',
                         style: const TextStyle(color: Colors.white54),
                       ),
                     ],

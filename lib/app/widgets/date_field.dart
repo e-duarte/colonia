@@ -43,7 +43,7 @@ class DateField extends StatelessWidget {
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(1980),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2101),
         );
 

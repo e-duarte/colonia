@@ -14,7 +14,7 @@ class DependenteService {
     final response = await http.get(Uri.parse('$uri/${pescador.id}'));
 
     if (response.statusCode == 200) {
-      final jsonDocuments = jsonDecode(response.body) as List;
+      final jsonDocuments = jsonDecode(utf8.decode(response.bodyBytes)) as List;
       final dependentes =
           jsonDocuments.map((d) => Dependente.fromJson(d)).toList();
       return dependentes;
@@ -35,7 +35,8 @@ class DependenteService {
     );
 
     if (response.statusCode == 201) {
-      final savedDependente = jsonDecode(response.body) as Json;
+      final savedDependente =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Json;
       return Dependente.fromJson(savedDependente);
     } else {
       throw Exception('Failed to create Dependente.');
