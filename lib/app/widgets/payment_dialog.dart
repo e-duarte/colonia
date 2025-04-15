@@ -116,7 +116,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
     if (_formKey.currentState!.validate()) {
       setState(() {
         final newPayment = BatchPayment(
-          nRecibo: nRecibo!,
+          nRecibo: int.parse(nRecibo!),
           paymentDates: _getDatesofPayment(),
         );
 

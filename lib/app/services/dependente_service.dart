@@ -34,6 +34,9 @@ class DependenteService {
       body: jsonEncode(dependente.toJson()),
     );
 
+    print('Response: ${response.statusCode}');
+    print('Body: ${response.body}');
+
     if (response.statusCode == 201) {
       final savedDependente =
           jsonDecode(utf8.decode(response.bodyBytes)) as Json;
@@ -54,7 +57,7 @@ class DependenteService {
       body: jsonEncode(dependente.toJson()),
     );
 
-    if (response.statusCode == 204) {
+    if (response.statusCode == 200) {
       return dependente;
     } else {
       throw Exception('Failed to update dependente');
@@ -70,7 +73,7 @@ class DependenteService {
       },
     );
 
-    if (response.statusCode == 204) {
+    if (response.statusCode == 200) {
       return dependente;
     } else {
       throw Exception('Failed to delete Dependente');

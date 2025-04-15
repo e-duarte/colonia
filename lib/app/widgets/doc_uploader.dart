@@ -22,7 +22,8 @@ class _DocUploaderState extends State<DocUploader> {
 
   void loadFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles();
+      final result = await FilePicker.platform.pickFiles(type: FileType.custom,
+  allowedExtensions: ['jpg', 'pdf', 'png'],);
       setState(() {
         filePath = (result != null) ? result.files.first.path : null;
         var encodedString = codeDoc(filePath);

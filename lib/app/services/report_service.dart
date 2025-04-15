@@ -6,14 +6,16 @@ import 'dart:convert';
 
 class ReportService {
   Future<String> _getEndpoint() async {
-    return '${await Network().getUri()}/report/';
+    return '${await Network().getUri()}/report';
   }
 
   Future<String> saveRequerimento(
       String dirPath, String type, Pescador pescador) async {
     final uri = await _getEndpoint();
 
-    final response = await http.get(Uri.parse('$uri/${pescador.id}/$type'));
+    print(Uri.parse('$uri/${pescador.id}/$type'));
+
+    final response = await http.get(Uri.parse('$uri/$type/${pescador.id}'));
     if (response.statusCode == 200) {
       var formatedDate =
           '${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}${DateTime.now().millisecondsSinceEpoch}';
@@ -25,7 +27,8 @@ class ReportService {
       return filePath;
     } else {
       throw Exception(
-          'Failed to load Pescadores. Status: ${response.statusCode}');
+          'Erro ao salvar relatório. Status: ${response.statusCode}',
+      );
     }
   }
 }

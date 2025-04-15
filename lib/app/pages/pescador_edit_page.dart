@@ -326,7 +326,7 @@ class _PescadorEditPageState extends State<PescadorEditPage> {
                             initialValue: pai,
                             onChanged: (value) => pai = value,
                             maxLength: 50,
-                            validator: FieldValidator.checkEmptyField,
+                            // validator: FieldValidator.checkEmptyField,
                             decoration: inputStyle('Pai'),
                             onEditingComplete: () {
                               _updatePescador(pescador);

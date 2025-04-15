@@ -39,7 +39,7 @@ class PaymentService {
       final uri = await _getEndpoint();
 
       final response = await http.post(
-        Uri.parse('$uri/${pescador.id}'),
+        Uri.parse('$uri/${pescador.id}/lote'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -49,10 +49,28 @@ class PaymentService {
       if (response.statusCode == 201) {
         return bacthPayment;
       } else {
-        throw Exception('Failed to create Payment.');
+        throw Exception('Erro ao salvar pagamento: ${response.statusCode}');
       }
     } else {
-      throw Exception('Failed to create Payment. Payment was done');
+      throw Exception('O pagamento já existe. Verifique os meses.');
+    }
+  }
+
+  Future<void> delete(
+      Pescador pescador, int year) async {
+    final uri = await _getEndpoint();
+
+
+    final response = await http.delete(
+      Uri.parse('$uri/${pescador.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({'ano': year}),
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception('Erro ao deletar pagamento: ${response.statusCode}');
     }
   }
 }

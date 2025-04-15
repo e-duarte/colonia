@@ -83,6 +83,7 @@ class PescadorTable extends StatelessWidget {
                           icon: const Icon(
                             Icons.delete,
                             color: Colors.red,
+                            semanticLabel: 'Delete',
                           ),
                         )
                       : IconButton(
