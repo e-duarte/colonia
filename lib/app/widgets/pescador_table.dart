@@ -12,12 +12,14 @@ class PescadorTable extends StatelessWidget {
     required this.pescadores,
     required this.selectedPescador,
     required this.handleTable,
+    required this.onRemovePescador
   });
 
   final List<String> columns;
   final List<Pescador> pescadores;
   final int? selectedPescador;
   final void Function(int? index) handleTable;
+  final void Function(Pescador pescador) onRemovePescador;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +79,17 @@ class PescadorTable extends StatelessWidget {
                   ),
                   pescadores[index].active
                       ? IconButton(
-                          onPressed: () {
-                            PescadorService().delete(pescadores[index]);
+                          onPressed: () async {
+                            await PescadorService().delete(pescadores[index]);
+                            onRemovePescador(pescadores[index]);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${pescadores[index].nome} removido com sucesso!',
+                                ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
                           },
                           icon: const Icon(
                             Icons.delete,

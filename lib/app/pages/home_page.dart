@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildTable() {
+
     const leftPadding = 50.0;
     const rightPadding = 50.0;
     const bottomPadding = 50.0;
@@ -107,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                     pescadores: pescadoresByActive,
                     selectedPescador: selectPescadorIndex,
                     handleTable: selectPescador,
+                    onRemovePescador: _removePescador,
                   );
                 } else if (snapshot.hasError) {
                   return Center(
@@ -246,9 +248,9 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            reload = true;
-                            selectPescadorIndex = null;
+                            _reload();
                           });
+
                         },
                         icon: const Icon(Icons.refresh),
                         iconSize: 30,
@@ -364,6 +366,22 @@ class _HomePageState extends State<HomePage> {
       selectPescadorIndex = (index == selectPescadorIndex) ? null : index;
       selectedPescador =
           (selectPescadorIndex != null) ? pescadoresByActive[index!] : null;
+    });
+  }
+
+  void _reload() {
+    reload = true;
+    selectPescadorIndex = null;
+  }
+
+  void _removePescador(Pescador pescador){
+    setState(() {
+      pescadores.remove(pescador);
+      // if (pescadoresByActive.contains(pescador)) {
+      //   pescadoresByActive.remove(pescador);
+      // } else {
+      //   pescadores.remove(pescador);
+      // }
     });
   }
 }
